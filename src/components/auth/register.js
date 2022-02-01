@@ -129,7 +129,8 @@ export default function Register(props) {
             </Button>
 
             {" "}
-            <Link to={`/${props.roleName.toLowerCase()}/login`}>
+            {/* <Link to={`/${props.roleName.toLowerCase()}/login`}> */}
+            <Link to={`/`}>
               <Button variant="secondary">Back</Button>
             </Link>
 
