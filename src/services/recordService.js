@@ -1,7 +1,7 @@
 import axios from "axios";
 import authHeader from './auth-header';
 
-const API_URL = "http://20.24.121.187/api/Issuer";
+const API_URL = "http://52.154.202.96/api/Issuer";
 
 const getRecordDetail = (nationalId, recordTypeName) => {
   let recordTypeAPI = "";
