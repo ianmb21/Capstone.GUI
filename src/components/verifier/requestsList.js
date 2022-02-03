@@ -98,7 +98,8 @@ export default function RequestsLists() {
   useEffect(() => {
 
     if (!user) {
-      navigate("/verifier/login");
+      // navigate("/verifier/login");
+      navigate("/");
     } else {
       dispatch(getRequests());
     }

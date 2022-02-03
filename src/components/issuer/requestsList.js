@@ -102,7 +102,8 @@ export default function RequestsLists() {
   useEffect(() => {
 
     if (!user) {
-      navigate("/issuer/login");
+      // navigate("/issuer/login");
+      navigate("/");
     } else {
       dispatch(getRequests());
     }

@@ -57,7 +57,8 @@ export default function RequestsLists() {
   useEffect(() => {
 
     if (!user) {
-      navigate("/holder/login");
+      // navigate("/holder/login");
+      navigate("/");
     } else {
       dispatch(getRequests(user.userId));
     }

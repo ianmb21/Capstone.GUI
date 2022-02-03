@@ -33,9 +33,9 @@ export default function App() {
           <Nav className="me-auto">
             {!user && (
               <>
-                <Nav.Link as={NavLink} to="/holder/list">Holder</Nav.Link>
+                {/* <Nav.Link as={NavLink} to="/holder/list">Holder</Nav.Link>
                 <Nav.Link as={NavLink} to="/issuer/list">Issuer</Nav.Link>
-                <Nav.Link as={NavLink} to="/verifier/list">Verifier</Nav.Link>
+                <Nav.Link as={NavLink} to="/verifier/list">Verifier</Nav.Link> */}
               </>
             )}
           </Nav>
@@ -52,17 +52,17 @@ export default function App() {
       <Container>
         <Routes>
           <Route path="/" element={<Login roleName="Holder" />} />
-          <Route path="/holder/login" element={<Login roleName="Holder" />} />
+          {/* <Route path="/holder/login" element={<Login roleName="Holder" />} /> */}
           <Route path="/holder/list" element={<HolderRequestsList />} />
           <Route path="/holder/register" element={<Register roleName="Holder" />} />
           <Route path="/holder/request" element={<Request />} />
 
-          <Route path="/issuer/login" element={<Login roleName="Issuer" />} />
-          <Route path="/issuer/register" element={<Register roleName="Issuer" />} />
+          {/* <Route path="/issuer/login" element={<Login roleName="Issuer" />} />
+          <Route path="/issuer/register" element={<Register roleName="Issuer" />} /> */}
           <Route path="/issuer/list" element={<IssuerRequestsList />} />
 
-          <Route path="/verifier/login" element={<Login roleName="Verifier" />} />
-          <Route path="/verifier/register" element={<Register roleName="Verifier" />} />
+          {/* <Route path="/verifier/login" element={<Login roleName="Verifier" />} />
+          <Route path="/verifier/register" element={<Register roleName="Verifier" />} /> */}
           <Route path="/verifier/list" element={<VerifierRequestsList />} />
 
           <Route path="/record/Identity%20Detail/:nationalId" element={<IdentityDetail />} />
