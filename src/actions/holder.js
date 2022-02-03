@@ -1,6 +1,7 @@
 import {
   GET_HOLDER_REQUESTS,
   CREATE_REQUEST,
+  UPDATE_HOLDER_REQUEST_STATUS
 } from "./types";
 
 import HolderService from "../services/holderService";
@@ -33,3 +34,20 @@ export const createRequest = (userId, nationalId, firstName, lastName, birthdate
     return Promise.reject(error.response.data.errors);
   }
 };
+
+export const updateRequestStatus = (data) => async (dispatch) => {
+  try {
+    const response = await HolderService.updateRequestStatus(data);
+
+    dispatch({
+      type: UPDATE_HOLDER_REQUEST_STATUS,
+      payload: data,
+    });
+
+    return Promise.resolve(response.data);
+
+  } catch (error) {
+    console.log(error);
+    return Promise.reject(error);
+  }
+}

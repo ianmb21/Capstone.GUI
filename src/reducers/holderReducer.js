@@ -1,6 +1,7 @@
 import {
   GET_HOLDER_REQUESTS,
   CREATE_REQUEST,
+  UPDATE_HOLDER_REQUEST_STATUS
 } from "../actions/types";
 
 const initialState = {
@@ -20,6 +21,14 @@ export const holderReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         allRequests: [...state.allRequests, ...payload],
+      };
+
+    case UPDATE_HOLDER_REQUEST_STATUS:
+      return {
+        ...state,
+        allRequests: state.allRequests.filter(
+          ({ requestId }) => requestId !== payload.requestId
+        ),
       };
 
     default:

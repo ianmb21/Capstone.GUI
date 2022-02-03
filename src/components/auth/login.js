@@ -39,12 +39,12 @@ export default function Login(props) {
       .then(() => {
         const loggedInUser = JSON.parse(localStorage.getItem('user'));
 
-        if (loggedInUser.roleName === props.roleName) {
-          navigate(`/${props.roleName.toLowerCase()}/list`);
-        } else {
-          dispatch(logout());
-          dispatch(setMessage("User cannot access this page."));
-        }
+        // if (loggedInUser.roleName === props.roleName) {
+          navigate(`/${loggedInUser.roleName.toLowerCase()}/list`);
+        // } else {
+        //   dispatch(logout());
+        //   dispatch(setMessage("User cannot access this page."));
+        // }
 
         setLoading(false);
       })
@@ -62,7 +62,7 @@ export default function Login(props) {
   return (
     <>
       <Breadcrumb>
-        <Breadcrumb.Item active>{props.roleName}</Breadcrumb.Item>
+        {/* <Breadcrumb.Item active>{props.roleName}</Breadcrumb.Item> */}
         <Breadcrumb.Item active>Login</Breadcrumb.Item>
       </Breadcrumb>
       <Row className='mt-3'>

@@ -102,7 +102,8 @@ export default function RequestsLists() {
   useEffect(() => {
 
     if (!user) {
-      navigate("/issuer/login");
+      // navigate("/issuer/login");
+      navigate("/");
     } else {
       dispatch(getRequests());
     }
@@ -119,6 +120,13 @@ export default function RequestsLists() {
         <Breadcrumb.Item active>Issuer</Breadcrumb.Item>
         <Breadcrumb.Item active>Requests List</Breadcrumb.Item>
       </Breadcrumb>
+
+      <select>
+        <option>All</option>
+        <option>New Request</option>
+        <option>Revoke</option>
+        <option>Rejected</option>
+      </select>
 
       {message && (
         <Alert className="mb-3" variant="success">

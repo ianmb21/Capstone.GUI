@@ -71,7 +71,8 @@ export default function Request() {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      navigate("/holder/login");
+      // navigate("/holder/login");
+      navigate("/");
     }
 
     return () => {
