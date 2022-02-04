@@ -30,9 +30,20 @@ export default function RequestsLists() {
 
   const ActionComponent = ({ row, onClick }) => {
     const clickHandler = () => onClick(row);
-
-    return <Button onClick={clickHandler}><FontAwesomeIcon icon={faInfoCircle} /></Button>;
+    const disabled = row.requestStatus === "Revoked" ? true : false;
+    
+    return <Button disabled={disabled} onClick={clickHandler}><FontAwesomeIcon icon={faInfoCircle} /></Button>;
   };
+
+  const conditionalRowStyles = [
+    {
+      when: row => row.requestStatus === "Revoked",
+      style: {
+        opacity: 0.5,
+        cursor: 'not-allowed',
+      },
+    }
+  ];
 
   const columns = [
     {
@@ -129,6 +140,7 @@ export default function RequestsLists() {
             pagination
             columns={columns}
             data={requests}
+            conditionalRowStyles={conditionalRowStyles}
           />
         </Col>
       </Row>
