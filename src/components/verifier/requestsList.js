@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { Breadcrumb, Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faFileAlt, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faFileAlt, faThumbsUp, faThumbsDown, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { getRequests, updateRequest } from "../../actions/verifier";
 import { setMessage, clearMessage } from '../../actions/message';
@@ -53,6 +53,14 @@ export default function RequestsLists() {
     {
       name: 'National Id',
       selector: row => row.nationalId,
+    },
+    {
+      name: 'First Name',
+      selector: row => row.firstName,
+    },
+    {
+      name: 'Last Name',
+      selector: row => row.lastName,
     },
     {
       name: 'Status',
@@ -127,6 +135,10 @@ export default function RequestsLists() {
         <Breadcrumb.Item active>Verifier</Breadcrumb.Item>
         <Breadcrumb.Item active>Requests List</Breadcrumb.Item>
       </Breadcrumb>
+
+      <Link to="/verifier/request">
+        <Button variant="success" className="mb-3"><FontAwesomeIcon icon={faPlusCircle} /> Request Record</Button>
+      </Link>
 
       {message && (
         <Alert className="mb-3" variant="danger">

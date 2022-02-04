@@ -1,20 +1,19 @@
-import { Form, Button, Row, Col, Breadcrumb, Spinner, Table, Modal } from 'react-bootstrap';
+import { Form, Button, Row, Col, Alert, Spinner, Modal } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { searchHolder, createRequest, getRecordType } from '../../actions/verifier';
 import { setMessage, clearMessage } from '../../actions/message';
-import VerifierService from '../../services/verifierService';
 import DataTable from 'react-data-table-component';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 export default function VerifierRequest() {
     const user = useSelector((state) => state.auth.user);
     const holderList = useSelector((state) => state.verifier.holderSearch);
     const subRoleMatrix = useSelector((state) => state.verifier.recordTypeId);
-    const [recordTypeIDs, setRecordTypeIDs] = useState([]);
     const [loading, setLoading] = useState(false);
-
-    const [isSearching, setIsSearching] = useState(false);
+    const message = useSelector(state => state.message);
 
     const [currentRow, setCurrentRow] = useState({});
 
@@ -30,24 +29,30 @@ export default function VerifierRequest() {
 
     const [show, setShow] = useState(false);
 
+    const [showMessage, setShowMessage] = useState(false);
+
     const handleClose = () => setShow(false);
+
+    const handleCloseMessage = () => {
+        setShowMessage(false);
+        dispatch(clearMessage());
+    }
+
     const handleShow = (row) => {
         setShow(true);
         setCurrentRow(row);
-        
-        console.log(request);
     };
 
     useEffect(() => {
-        setRequest({ ...request
+        setRequest({
+            ...request
             , nationalId: currentRow.nationalId
             , firstName: currentRow.firstName
             , lastName: currentRow.lastName
             , birthdate: currentRow.birthDate
             , remarks: ""
         });
-        console.log(request);
-    },[show])
+    }, [show])
 
     const ActionComponent = ({ row, onClick }) => {
         const clickHandler = () => onClick(row);
@@ -73,14 +78,6 @@ export default function VerifierRequest() {
             cell: (row) => <ActionComponent onClick={handleShow} row={row} />,
         },
     ]
-
-    const data = {
-        firstName: currentRow.firstName,
-        middleName: currentRow.middleName,
-        lastName: currentRow.lastName,
-        nationalId: currentRow.nationalId,
-        birthDate: currentRow.birthDate
-    }
 
     const initialRequestState = {
         nationalId: "",
@@ -108,45 +105,45 @@ export default function VerifierRequest() {
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setSearch({ ...search, [name]: value });
-        console.log(search);
     }
 
     const handlePurposeChange = (e) => {
         const { name, value } = e.target;
         setRequest({ ...request, [name]: value });
-        console.log(request);
     }
 
     const handleRequest = (e) => {
         e.preventDefault();
-    
+
         setLoading(true);
 
         const { nationalId, firstName, lastName, birthdate, recordTypeIds, remarks } = request;
 
-        console.log(request);
-    
         if (!Array.isArray(recordTypeIds) || !recordTypeIds.length) {
-          dispatch(setMessage("Please select a Record Type."));
-          console.log("Please select a Record Type.");
-    
-          setLoading(false);
+            dispatch(setMessage("Please select a Record Type."));
+
+            setLoading(false);
         } else {
-          dispatch(createRequest(user.userId, nationalId, firstName, lastName, birthdate, recordTypeIds, remarks))
-            .then(() => {
-              setLoading(false);
-              console.log("Request/s has been successfully created.");
-    
-              dispatch(setMessage("Request/s has been successfully created."));
-            })
-            .catch((error) => {
-              console.log(error);
-              
-              setLoading(false);
-            });
+            dispatch(createRequest(user.userId, nationalId, firstName, lastName, birthdate, recordTypeIds, remarks))
+
+                .then(() => {
+
+                    setLoading(false);
+
+                    dispatch(setMessage("Request/s has been successfully created."));
+
+                    setShow(false);
+
+                    setShowMessage(true);
+                })
+                .catch((error) => {
+                    console.log(error);
+
+                    setLoading(false);
+                });
         }
-    
-      };
+
+    };
 
     const handleSearch = (e) => {
 
@@ -172,11 +169,7 @@ export default function VerifierRequest() {
         } else {
             dispatch(searchHolder(search.firstName, search.lastName))
             dispatch(getRecordType(user.userId));
-            alert(JSON.stringify(subRoleMatrix));
-            console.log(subRoleMatrix);
         }
-
-
         return () => {
             dispatch(clearMessage());
         }
@@ -185,53 +178,56 @@ export default function VerifierRequest() {
 
     return (
         <>
-            <Form onSubmit={handleSearch}>
-                <Form.Group className="mb-3" controlId="firstName">
-                    <Form.Label>First Name*</Form.Label>
-                    <Form.Control
-                        required
-                        type="text"
-                        placeholder="First Name"
-                        name="firstName"
-                        value={search.firstName}
-                        onChange={handleInputChange}
-                    />
-                </Form.Group>
+            <Link to="/verifier/list">
+                <Button variant="secondary" className="mb-3"><FontAwesomeIcon icon={faArrowLeft} /> Return to request list</Button>
+            </Link>
+            <br>
+            </br>
+            <Col md={4}>
+                <Form className="mb-3" onSubmit={handleSearch}>
+                    
+                    <Form.Group className="mb-3" controlId="firstName">
+                        <Form.Label>First Name*</Form.Label>
+                        <Form.Control
+                            required
+                            type="text"
+                            placeholder="First Name"
+                            name="firstName"
+                            value={search.firstName}
+                            onChange={handleInputChange}
+                        />
+                    </Form.Group>
 
-                <Form.Group className="mb-3" controlId="lastName">
-                    <Form.Label>Last Name*</Form.Label>
-                    <Form.Control
-                        required
-                        type="text"
-                        placeholder="Last Name"
-                        name="lastName"
-                        value={search.lastName}
-                        onChange={handleInputChange}
-                    />
-                </Form.Group>
+                    <Form.Group className="mb-3" controlId="lastName">
+                        <Form.Label>Last Name*</Form.Label>
+                        <Form.Control
+                            required
+                            type="text"
+                            placeholder="Last Name"
+                            name="lastName"
+                            value={search.lastName}
+                            onChange={handleInputChange}
+                        />
+                    </Form.Group>
 
-                <Button type="submit" variant="primary" disabled={loading}>
-                    {loading ? (
-                        <>
-                            <Spinner
-                                as="span"
-                                animation="border"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                            />
-                            {" "}Searching...
-                        </>
-                    ) : (
-                        <>Search</>
-                    )}
-                </Button>
-
-                {" "}
-                <Link to="/verifier/list">
-                    <Button variant="secondary">Back</Button>
-                </Link>
-            </Form>
+                    <Button type="submit" variant="primary" disabled={loading}>
+                        {loading ? (
+                            <>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                />
+                                {" "}Searching...
+                            </>
+                        ) : (
+                            <><FontAwesomeIcon icon={faSearch} /> Search</>
+                        )}
+                    </Button>
+                </Form>
+            </Col>
             <br>
             </br>
             <Row>
@@ -255,82 +251,98 @@ export default function VerifierRequest() {
                 centered>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        {currentRow.firstName} {currentRow.middleName} {currentRow.lastName}
+                        Request record for '{currentRow.firstName} {currentRow.middleName} {currentRow.lastName}''
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group className="mb-3" controlId="recordType">
                         <Form.Label>Record Type*</Form.Label>
-                        <Form.Check
-                            type="checkbox"
-                            id="identityDetail"
-                            label="Identity Detail"
-                            value="1"
-                            onChange={handleCheckboxChange}
-                            
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            id="creditScore"
-                            label="Credit Score"
-                            value="2"
-                            onChange={handleCheckboxChange} 
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            id="educationRecords"
-                            label="Education Record"
-                            value="3"
-                            onChange={handleCheckboxChange} 
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            id="employmentHistory"
-                            label="Employment History"
-                            value="4"
-                            onChange={handleCheckboxChange}
-                        />
-                        <Form.Check
-                            type="checkbox"
-                            id="criminalRecord"
-                            label="Criminal Record"
-                            value="5"
-                            onChange={handleCheckboxChange}
-                        />
+                        {subRoleMatrix.map((data) => {
+                            let labelName = "";
+                            switch (data.recordTypeId) {
+                                case 1:
+                                    labelName = "Identity Detail";
+                                    break;
+                                case 2:
+                                    labelName = "Credit Score";
+                                    break;
+                                case 3:
+                                    labelName = "Education Record";
+                                    break;
+                                case 4:
+                                    labelName = "Employment History";
+                                    break;
+                                case 5:
+                                    labelName = "Criminal Record";
+                                    break;
+                            }
+                            return (
+                                <Form.Check
+                                    type="checkbox"
+                                    id={data.recordTypeId}
+                                    label={labelName}
+                                    value={data.recordTypeId}
+                                    onChange={handleCheckboxChange}
+                                />
+                            )
+                        })}
                     </Form.Group>
                     <Form.Group as={Col} md="12" controlId="remarks">
-                    <Form.Label>
-                      Purpose
-                    </Form.Label>
-                    <Form.Control
-                      required
-                        type="text"
-                        name="remarks"
-                        onChange={handlePurposeChange}
-                    />
-                  </Form.Group>
-
+                        <Form.Label>
+                            Purpose
+                        </Form.Label>
+                        <Form.Control
+                            required
+                            type="text"
+                            name="remarks"
+                            onChange={handlePurposeChange}
+                        />
+                        {message && (
+                            <Alert className="mt-3" variant="danger">
+                                {message}
+                            </Alert>
+                        )}
+                    </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
-                <Button variant="primary" onClick={handleRequest}>
-              {loading ? (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  {" "}Sending...
-                </>
-              ) : (
-                <>Send Request</>
-              )}
-            </Button>
+                    <Button variant="primary" onClick={handleRequest}>
+                        {loading ? (
+                            <>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                />
+                                {" "}Sending...
+                            </>
+                        ) : (
+                            <>Send Request</>
+                        )}
+                    </Button>
 
-            {" "}
-              <Button variant="secondary" onClick={handleClose}>Cancel</Button>
+                    {" "}
+                    <Button variant="secondary" onClick={handleClose}>Cancel</Button>
+                </Modal.Footer>
+            </Modal>
+            <Modal
+                show={showMessage}
+                size="sm"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered>
+                <Modal.Body>
+                    {message && (
+                        <Alert className="mt-3" variant="success">
+                            {message}
+                        </Alert>
+                    )}
+                </Modal.Body>
+                <Modal.Footer style={{
+                    display: "flex",
+                    justifyContent: "center",
+                }}>
+                    <Button size="lg" variant="outline-success" onClick={handleCloseMessage}>OK</Button>
                 </Modal.Footer>
             </Modal>
 
