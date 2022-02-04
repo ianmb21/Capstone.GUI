@@ -23,11 +23,12 @@ class AuthService {
       });
   }
 
-  register(username, password, roleName) {
+  register(username, password, roleName, nationalId) {
     return axios.post(API_URL + "register", {
       username,
       password,
       roleName,
+      nationalId,
     });
   }
 }
