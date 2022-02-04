@@ -33,7 +33,7 @@ export default function Register(props) {
 
     setLoading(true);
 
-    const { username, password, confirmPassword } = user;
+    const { username, password, confirmPassword, nationalId } = user;
 
     if (password !== confirmPassword) {
       dispatch(
@@ -43,7 +43,7 @@ export default function Register(props) {
       setLoading(false);
     } else {
       dispatch(
-        register(username, password, props.roleName)
+        register(username, password, props.roleName, nationalId)
       )
         .then(() => {
           setSuccesful(true);
@@ -84,6 +84,18 @@ export default function Register(props) {
                 placeholder="Username"
                 name="username"
                 value={user.username}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="nationalId">
+              <Form.Label>National Id</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                placeholder="National Id"
+                name="nationalId"
+                value={user.nationalId}
                 onChange={handleInputChange}
               />
             </Form.Group>
