@@ -1,4 +1,4 @@
-import { Form, Button, Row, Col, Alert, Spinner, Modal } from 'react-bootstrap';
+import { Form, Button, Row, Col, Alert, Spinner, Modal, Card } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
@@ -43,17 +43,6 @@ export default function VerifierRequest() {
         setCurrentRow(row);
     };
 
-    useEffect(() => {
-        setRequest({
-            ...request
-            , nationalId: currentRow.nationalId
-            , firstName: currentRow.firstName
-            , lastName: currentRow.lastName
-            , birthdate: currentRow.birthDate
-            , remarks: ""
-        });
-    }, [show])
-
     const ActionComponent = ({ row, onClick }) => {
         const clickHandler = () => onClick(row);
 
@@ -85,6 +74,7 @@ export default function VerifierRequest() {
         lastName: "",
         birthdate: "",
         remarks: "",
+        holderId: "",
         recordTypeIds: []
     };
 
@@ -117,14 +107,17 @@ export default function VerifierRequest() {
 
         setLoading(true);
 
-        const { nationalId, firstName, lastName, birthdate, recordTypeIds, remarks } = request;
+        const { nationalId, firstName, lastName, birthdate, recordTypeIds, remarks, holderId } = request;
 
         if (!Array.isArray(recordTypeIds) || !recordTypeIds.length) {
-            dispatch(setMessage("Please select a Record Type."));
+            dispatch(setMessage("Error: Please select a Record Type."));
 
             setLoading(false);
+        } else if (remarks == "") {
+            dispatch(setMessage("Error: Please input purpose details."));
+            setLoading(false);
         } else {
-            dispatch(createRequest(user.userId, nationalId, firstName, lastName, birthdate, recordTypeIds, remarks))
+            dispatch(createRequest(user.userId, nationalId, firstName, lastName, birthdate, recordTypeIds, remarks, holderId))
 
                 .then(() => {
 
@@ -135,6 +128,10 @@ export default function VerifierRequest() {
                     setShow(false);
 
                     setShowMessage(true);
+
+                    setSearch(initialSearchState);
+
+                    dispatch(searchHolder(search.firstName, search.lastName))
                 })
                 .catch((error) => {
                     console.log(error);
@@ -168,7 +165,7 @@ export default function VerifierRequest() {
             navigate("/verifier/login");
         } else {
             dispatch(searchHolder(search.firstName, search.lastName))
-            dispatch(getRecordType(user.userId));
+            dispatch(getRecordType(user.subRoleId));
         }
         return () => {
             dispatch(clearMessage());
@@ -176,18 +173,30 @@ export default function VerifierRequest() {
 
     }, [user, navigate, dispatch]);
 
+    useEffect(() => {
+        setRequest({
+            ...request
+            , nationalId: currentRow.nationalId
+            , firstName: currentRow.firstName
+            , lastName: currentRow.lastName
+            , birthdate: currentRow.birthDate
+            , holderId: currentRow.holderId
+            , remarks: ""
+        });
+    }, [show, currentRow.nationalId, currentRow.firstName, currentRow.lastName, currentRow.birthDate, currentRow.holderId])
+
     return (
         <>
             <Link to="/verifier/list">
-                <Button variant="secondary" className="mb-3"><FontAwesomeIcon icon={faArrowLeft} /> Return to request list</Button>
+                <Button variant="secondary" style={{ float: 'right' }} className="mb-3"><FontAwesomeIcon icon={faArrowLeft} /> Return to request list</Button>
             </Link>
             <br>
             </br>
-            <Col md={4}>
+            <Col md={6}>
                 <Form className="mb-3" onSubmit={handleSearch}>
-                    
+                    <Form.Label>Search Holder:</Form.Label>
                     <Form.Group className="mb-3" controlId="firstName">
-                        <Form.Label>First Name*</Form.Label>
+
                         <Form.Control
                             required
                             type="text"
@@ -196,10 +205,11 @@ export default function VerifierRequest() {
                             value={search.firstName}
                             onChange={handleInputChange}
                         />
+
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="lastName">
-                        <Form.Label>Last Name*</Form.Label>
+
                         <Form.Control
                             required
                             type="text"
@@ -208,6 +218,7 @@ export default function VerifierRequest() {
                             value={search.lastName}
                             onChange={handleInputChange}
                         />
+
                     </Form.Group>
 
                     <Button type="submit" variant="primary" disabled={loading}>
@@ -227,21 +238,20 @@ export default function VerifierRequest() {
                         )}
                     </Button>
                 </Form>
+                <br>
+                </br>
+                <Row className="mb-3">
+                    <h4>Holder List</h4>
+                    <Col>
+                        <DataTable
+                            columns={columns}
+                            data={holderList}
+                        />
+                    </Col>
+                </Row>
             </Col>
-            <br>
-            </br>
-            <Row>
-                <h4>Holder Lists</h4>
-            </Row>
 
-            <Row>
-                <Col>
-                    <DataTable
-                        columns={columns}
-                        data={holderList}
-                    />
-                </Col>
-            </Row>
+
 
             <Modal
                 show={show}
@@ -251,13 +261,14 @@ export default function VerifierRequest() {
                 centered>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        Request record for '{currentRow.firstName} {currentRow.middleName} {currentRow.lastName}''
+                        Request record of '{currentRow.firstName} {currentRow.middleName} {currentRow.lastName}'
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form.Group className="mb-3" controlId="recordType">
                         <Form.Label>Record Type*</Form.Label>
                         {subRoleMatrix.map((data) => {
+
                             let labelName = "";
                             switch (data.recordTypeId) {
                                 case 1:
@@ -275,6 +286,8 @@ export default function VerifierRequest() {
                                 case 5:
                                     labelName = "Criminal Record";
                                     break;
+                                default:
+                                    labelName = "";
                             }
                             return (
                                 <Form.Check
@@ -283,11 +296,12 @@ export default function VerifierRequest() {
                                     label={labelName}
                                     value={data.recordTypeId}
                                     onChange={handleCheckboxChange}
+                                    key={data.recordTypeId}
                                 />
                             )
                         })}
                     </Form.Group>
-                    <Form.Group as={Col} md="12" controlId="remarks">
+                    <Form.Group md="12" controlId="remarks">
                         <Form.Label>
                             Purpose
                         </Form.Label>

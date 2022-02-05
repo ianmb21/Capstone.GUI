@@ -246,7 +246,7 @@ export default function RequestsLists() {
 
         </Modal.Body>
         <Modal.Footer>
-          <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`} target="_blank">
+          <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`}>
             <Button variant="primary">
               <FontAwesomeIcon icon={faFileAlt} /> Show Record Details
             </Button>
