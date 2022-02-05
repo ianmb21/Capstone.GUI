@@ -80,7 +80,7 @@ export default function IdentityDetail() {
                     Birthdate
                   </Form.Label>
                   <Col sm="5">
-                    <Form.Control readOnly defaultValue={record.birthDate} />
+                    <Form.Control readOnly defaultValue={record.birthDate.substr(0,10)} />
                   </Col>
                 </Form.Group>
               </Form>

@@ -59,7 +59,9 @@ export default function CreditScore() {
                     Account Number
                   </Form.Label>
                   <Col sm="3">
-                    <Form.Control readOnly defaultValue={record.accountNumber} />
+                    <Form.Control readOnly 
+                    defaultValue={'xxx-xxx-' + record.accountNumber.substr(record.accountNumber.length - 3)}
+                     />
                   </Col>
                 </Form.Group>
 
