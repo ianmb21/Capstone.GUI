@@ -8,9 +8,9 @@ import {
 
 import VerifierService from "../services/verifierService";
 
-export const getRequests = () => async (dispatch) => {
+export const getRequests = (requestStatus = 'All') => async (dispatch) => {
   try {
-    const response = await VerifierService.getRequests();
+    const response = await VerifierService.getRequests(requestStatus);
 
     dispatch({
       type: GET_VERIFIER_REQUESTS,

@@ -30,9 +30,8 @@ export default function RequestsLists() {
 
   const handleSelect = (e) => {
     e.preventDefault();
-    alert(e.target.value);
-
     setLoading(true);
+    
     dispatch(getRequests(e.target.value))
     .then(() => {
       setLoading(false);
