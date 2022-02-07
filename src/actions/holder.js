@@ -1,7 +1,7 @@
 import {
   GET_HOLDER_REQUESTS,
   CREATE_REQUEST,
-  UPDATE_HOLDER_REQUEST_STATUS
+  UPDATE_HOLDER_REQUEST_STATUS,
 } from "./types";
 
 import HolderService from "../services/holderService";

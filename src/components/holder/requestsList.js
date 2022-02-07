@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from 'react-router-dom';
 
 import DataTable from 'react-data-table-component';
-import { Breadcrumb, Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
+import { Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
+import Breadcrumb from '../utilities/breadcrumb';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faPlusCircle, faFileAlt, faPaperPlane, faUndo } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faArrowLeft, faFileAlt, faPaperPlane, faUndo } from '@fortawesome/free-solid-svg-icons';
 
 import { getRequests, updateRequestStatus } from "../../actions/holder";
+import { MDBBtn } from 'mdb-react-ui-kit';
 
 export default function RequestsLists() {
   const user = useSelector((state) => state.auth.user);
@@ -34,22 +36,22 @@ export default function RequestsLists() {
 
     setLoading(true);
     dispatch(getRequests(user.userId, e.target.value))
-    .then(() => {
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.log(error);
-      setLoading(false);
-    });
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
   };
-  
-  const requestStatusList = [{id: 'All', value: 'All'}, 
-  {id: 'New Request', value: 'New Request'}, 
-  {id: 'Rejected', value: 'Rejected'}, 
-  {id: 'Approved', value: 'Approved'}, 
-  {id: 'Revoked', value: 'Revoked'}, 
-  {id: 'Request Confirmation', value: 'Request Confirmation'}, 
-  {id: 'For Verification', value: 'For Verification'}];
+
+  const requestStatusList = [{ id: 'All', value: 'All' },
+  { id: 'New Request', value: 'New Request' },
+  { id: 'Rejected', value: 'Rejected' },
+  { id: 'Approved', value: 'Approved' },
+  { id: 'Revoked', value: 'Revoked' },
+  { id: 'Request Confirmation', value: 'Request Confirmation' },
+  { id: 'For Verification', value: 'For Verification' }];
 
   const ActionComponent = ({ row, onClick }) => {
     const clickHandler = () => onClick(row);
@@ -61,18 +63,22 @@ export default function RequestsLists() {
     {
       name: 'Record Type',
       selector: row => row.recordTypeName,
+      sortable: true,
     },
     {
       name: 'National Id',
       selector: row => row.nationalId,
+      sortable: true,
     },
     {
       name: 'Status',
       selector: row => row.requestStatus,
+      sortable: true,
     },
     {
       name: 'Date Requested',
       selector: row => row.dateRequested,
+      sortable: true,
     },
     {
       button: true,
@@ -90,7 +96,7 @@ export default function RequestsLists() {
     }
 
   }, [user, navigate, dispatch]);
-  
+
   const updateHolderRequestStatus = (status) => {
     setLoading(true);
 
@@ -118,28 +124,29 @@ export default function RequestsLists() {
 
   return (
     <>
-      <Breadcrumb className="mb-3">
-        <Breadcrumb.Item active>Holder</Breadcrumb.Item>
-        <Breadcrumb.Item active>Requests List</Breadcrumb.Item>
-      </Breadcrumb>
+      <Link to="/holder">
+        <Button variant="link"><FontAwesomeIcon icon={faArrowLeft} /> Return to homepage</Button>
+      </Link>
+      <Form.Select aria-label="Default select example" onChange={(e) => handleSelect(e)}>
+        {
+          requestStatusList.map((items) => {
+            return (
+              <option value={items.id}>{items.value}</option>
+            );
+          })
+        }
+      </Form.Select>
 
-      <Form.Select aria-label="Default select example" onChange={(e) => handleSelect(e) }>
-          {
-              requestStatusList.map((items) => {
-                return (
-                  <option value={items.id}>{items.value}</option>
-                );
-              })
-          }          
-      </Form.Select>        
 
-      
       <Row>
         <Col>
           <DataTable
+            title='Requests List'
             pagination
             columns={columns}
             data={requests}
+            highlightOnHover
+            striped
           />
         </Col>
       </Row>
@@ -236,68 +243,68 @@ export default function RequestsLists() {
               </Link>
             )
           }
-          {         
+          {
             (currentRow.hasRecord && currentRow.requestStatus === "Request Confirmation") ?
-            (
-              <Button variant="primary" disabled={loading} onClick={() => updateHolderRequestStatus("For Verification")}>
-              {loading ? (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  {" "}Loading...
-                </>
-                ) : (
-                  <><FontAwesomeIcon icon={faPaperPlane} /> Send To Verifier</>
-                )}
-              </Button>
-            ) 
-            : (!currentRow.hasRecord && currentRow.requestStatus === "Request Confirmation") ?
-            (
-              <Button variant="primary" disabled={loading} onClick={() => updateHolderRequestStatus("New Request")}>
-              {loading ? (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  {" "}Loading...
-                </>
-                ) : (
-                  <><FontAwesomeIcon icon={faPaperPlane} /> Send To Issuer</>
-                )}
-              </Button>
-            )
-            : (currentRow.requestStatus === "For Verification")?
-            (
-              <Button variant="danger" disabled={loading} onClick={() => updateHolderRequestStatus("Revoked")}>
-              {loading ? (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  {" "}Loading...
-                </>
-                ) : (
-                  <><FontAwesomeIcon icon={faUndo} /> Revoke</>
-                )}
-              </Button>
-            )
-            :
-            (
-              ""
-            )
+              (
+                <Button variant="primary" disabled={loading} onClick={() => updateHolderRequestStatus("For Verification")}>
+                  {loading ? (
+                    <>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                      />
+                      {" "}Loading...
+                    </>
+                  ) : (
+                    <><FontAwesomeIcon icon={faPaperPlane} /> Send To Verifier</>
+                  )}
+                </Button>
+              )
+              : (!currentRow.hasRecord && currentRow.requestStatus === "Request Confirmation") ?
+                (
+                  <Button variant="primary" disabled={loading} onClick={() => updateHolderRequestStatus("New Request")}>
+                    {loading ? (
+                      <>
+                        <Spinner
+                          as="span"
+                          animation="border"
+                          size="sm"
+                          role="status"
+                          aria-hidden="true"
+                        />
+                        {" "}Loading...
+                      </>
+                    ) : (
+                      <><FontAwesomeIcon icon={faPaperPlane} /> Send To Issuer</>
+                    )}
+                  </Button>
+                )
+                : (currentRow.requestStatus === "For Verification") ?
+                  (
+                    <Button variant="danger" disabled={loading} onClick={() => updateHolderRequestStatus("Revoked")}>
+                      {loading ? (
+                        <>
+                          <Spinner
+                            as="span"
+                            animation="border"
+                            size="sm"
+                            role="status"
+                            aria-hidden="true"
+                          />
+                          {" "}Loading...
+                        </>
+                      ) : (
+                        <><FontAwesomeIcon icon={faUndo} /> Revoke</>
+                      )}
+                    </Button>
+                  )
+                  :
+                  (
+                    ""
+                  )
           }
         </Modal.Footer>
       </Modal>

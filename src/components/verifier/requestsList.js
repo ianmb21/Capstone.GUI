@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 
 import DataTable from 'react-data-table-component';
-import { Breadcrumb, Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
+import { Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faFileAlt, faThumbsUp, faThumbsDown, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faFileAlt, faThumbsUp, faThumbsDown, faPlusCircle, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
+import Breadcrumb from '../utilities/breadcrumb';
 import { getRequests, updateRequest } from "../../actions/verifier";
 import { setMessage, clearMessage } from '../../actions/message';
 
@@ -54,7 +55,7 @@ export default function RequestsLists() {
   const ActionComponent = ({ row, onClick }) => {
     const clickHandler = () => onClick(row);
     const disabled = row.requestStatus === "Revoked" ? true : false;
-    
+
     return <Button disabled={disabled} onClick={clickHandler}><FontAwesomeIcon icon={faInfoCircle} /></Button>;
   };
 
@@ -152,13 +153,11 @@ export default function RequestsLists() {
 
   return (
     <>
-      <Breadcrumb className="mb-3">
-        <Breadcrumb.Item active>Verifier</Breadcrumb.Item>
-        <Breadcrumb.Item active>Requests List</Breadcrumb.Item>
-      </Breadcrumb>
-
+      <Link to="/verifier">
+        <Button variant="link"><FontAwesomeIcon icon={faArrowLeft} /> Return to homepage</Button>
+      </Link>
       <Link to="/verifier/request">
-        <Button variant="success" className="mb-3"><FontAwesomeIcon icon={faPlusCircle} /> Request Record</Button>
+        <Button variant="success" className='flex-right'><FontAwesomeIcon icon={faPlusCircle} /> Request Record</Button>
       </Link>
 
       {message && (
@@ -181,10 +180,13 @@ export default function RequestsLists() {
       <Row>
         <Col>
           <DataTable
+            title='Requests List'
             pagination
             columns={columns}
             data={requests}
             conditionalRowStyles={conditionalRowStyles}
+            highlightOnHover
+            striped
           />
         </Col>
       </Row>

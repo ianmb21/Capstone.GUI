@@ -5,6 +5,7 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   SET_MESSAGE,
+  GET_NATIONAL_ID,
 } from "./types";
 
 import AuthService from "../services/authService";
@@ -71,4 +72,17 @@ export const logout = () => (dispatch) => {
         type: LOGOUT,
       })
     );
+};
+
+export const getNationalId = (userId) => async (dispatch) => {
+  try {
+    const response = await AuthService.getNationalId(userId);
+
+    dispatch({
+      type: GET_NATIONAL_ID,
+      payload: response.data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };

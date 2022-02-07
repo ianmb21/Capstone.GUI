@@ -27,7 +27,7 @@ const updateRequestStatus = (data) => {
 const IssuerService = {
   getRequests,
   createRequest,
-  updateRequestStatus
+  updateRequestStatus,
 };
 
 export default IssuerService;

@@ -4,13 +4,14 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  GET_NATIONAL_ID,
 } from "../actions/types";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = user
-  ? { isLoggedIn: true, user }
-  : { isLoggedIn: false, user: null };
+  ? { isLoggedIn: true, user, nationalId: "", }
+  : { isLoggedIn: false, user: null, nationalId: "", };
 
 export const authReducer = (state = initialState, { type, payload }) => {
 
@@ -42,6 +43,11 @@ export const authReducer = (state = initialState, { type, payload }) => {
         ...state,
         isLoggedIn: false,
         user: null,
+      };
+    case GET_NATIONAL_ID:
+      return {
+        ...state,
+        nationalId: payload,
       };
     default:
       return state;

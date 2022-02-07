@@ -7,11 +7,11 @@ import { Card, Form, Row, Col } from "react-bootstrap";
 
 import { getRecordDetail, removeSelectedRecord } from "../../actions/record";
 
-export default function CriminalRecord() {
+export default function CriminalRecord({ nationalId }) {
   const user = useSelector((state) => state.auth.user);
   const records = useSelector((state) => state.record.selectedRecords);
 
-  const { nationalId } = useParams();
+  const { nationalIdParams } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -21,11 +21,12 @@ export default function CriminalRecord() {
       navigate("/");
     } else {
       if (nationalId && nationalId !== "") dispatch(getRecordDetail(nationalId, "Criminal Record"));
+      if (nationalIdParams && nationalIdParams !== "") dispatch(getRecordDetail(nationalIdParams, "Criminal Record"));
     }
 
-    return () => {
-      dispatch(removeSelectedRecord());
-    }
+    // return () => {
+    //   dispatch(removeSelectedRecord());
+    // }
 
   }, [user, navigate, dispatch, nationalId]);
 
@@ -44,7 +45,7 @@ export default function CriminalRecord() {
                     National Id
                   </Form.Label>
                   <Col sm="11">
-                    <Form.Control readOnly defaultValue={nationalId} />
+                    <Form.Control readOnly defaultValue={record.nationalId} />
                   </Col>
                 </Form.Group>
 

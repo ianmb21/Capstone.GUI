@@ -1,4 +1,5 @@
 import axios from "axios";
+import authHeader from './auth-header';
 
 const API_URL = "http://52.154.202.96/api/Auth/";
 
@@ -31,6 +32,10 @@ class AuthService {
       nationalId,
     });
   }
+
+  getNationalId(userId) {
+    return axios.get(API_URL + "getNationalId/" + userId, { headers: authHeader() });
+  };
 }
 
 export default new AuthService();
