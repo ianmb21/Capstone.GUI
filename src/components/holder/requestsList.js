@@ -19,11 +19,14 @@ export default function RequestsLists() {
   const [currentRow, setCurrentRow] = useState({});
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [readOnly, setReadOnly] = useState(true);
 
   const handleClose = () => setShow(false);
   const handleShow = (row) => {
     setShow(true);
     setCurrentRow(row);
+    row.requestStatus === "For Verification" ?
+      setReadOnly(false) : setReadOnly(true);
   };
 
   const ActionComponent = ({ row, onClick }) => {
@@ -186,7 +189,7 @@ export default function RequestsLists() {
                     <Form.Label>
                       Remarks
                     </Form.Label>
-                    <Form.Control as="textarea" readOnly defaultValue={currentRow.remarks} />
+                    <Form.Control as="textarea" readOnly={readOnly} defaultValue={currentRow.remarks} />
                   </Form.Group>
                 </Row>
               </Form>
