@@ -123,10 +123,6 @@ export default function RequestsLists() {
         <Breadcrumb.Item active>Requests List</Breadcrumb.Item>
       </Breadcrumb>
 
-      <Link to="/holder/request">
-        <Button variant="success" className="mb-3"><FontAwesomeIcon icon={faPlusCircle} /> Request Record</Button>
-      </Link>
-
       <Form.Select aria-label="Default select example" onChange={(e) => handleSelect(e) }>
           {
               requestStatusList.map((items) => {
