@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 
 import DataTable from 'react-data-table-component';
-import { Breadcrumb, Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
+import { Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faFileAlt, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faFileAlt, faThumbsUp, faThumbsDown, faPlusCircle, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
+import Breadcrumb from '../utilities/breadcrumb';
 import { getRequests, updateRequest } from "../../actions/verifier";
 import { setMessage, clearMessage } from '../../actions/message';
 
@@ -30,9 +31,20 @@ export default function RequestsLists() {
 
   const ActionComponent = ({ row, onClick }) => {
     const clickHandler = () => onClick(row);
+    const disabled = row.requestStatus === "Revoked" ? true : false;
 
-    return <Button onClick={clickHandler}><FontAwesomeIcon icon={faInfoCircle} /></Button>;
+    return <Button disabled={disabled} onClick={clickHandler}><FontAwesomeIcon icon={faInfoCircle} /></Button>;
   };
+
+  const conditionalRowStyles = [
+    {
+      when: row => row.requestStatus === "Revoked",
+      style: {
+        opacity: 0.5,
+        cursor: 'not-allowed',
+      },
+    }
+  ];
 
   const columns = [
     {
@@ -42,6 +54,14 @@ export default function RequestsLists() {
     {
       name: 'National Id',
       selector: row => row.nationalId,
+    },
+    {
+      name: 'First Name',
+      selector: row => row.firstName,
+    },
+    {
+      name: 'Last Name',
+      selector: row => row.lastName,
     },
     {
       name: 'Status',
@@ -112,10 +132,12 @@ export default function RequestsLists() {
 
   return (
     <>
-      <Breadcrumb className="mb-3">
-        <Breadcrumb.Item active>Verifier</Breadcrumb.Item>
-        <Breadcrumb.Item active>Requests List</Breadcrumb.Item>
-      </Breadcrumb>
+      <Link to="/verifier">
+        <Button variant="link"><FontAwesomeIcon icon={faArrowLeft} /> Return to homepage</Button>
+      </Link>
+      <Link to="/verifier/request">
+        <Button variant="success" className='flex-right'><FontAwesomeIcon icon={faPlusCircle} /> Request Record</Button>
+      </Link>
 
       {message && (
         <Alert className="mb-3" variant="danger">
@@ -126,9 +148,13 @@ export default function RequestsLists() {
       <Row>
         <Col>
           <DataTable
+            title='Requests List'
             pagination
             columns={columns}
             data={requests}
+            conditionalRowStyles={conditionalRowStyles}
+            highlightOnHover
+            striped
           />
         </Col>
       </Row>
@@ -222,7 +248,7 @@ export default function RequestsLists() {
 
         </Modal.Body>
         <Modal.Footer>
-          <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`} target="_blank">
+          <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`}>
             <Button variant="primary">
               <FontAwesomeIcon icon={faFileAlt} /> Show Record Details
             </Button>

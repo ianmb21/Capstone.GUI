@@ -21,6 +21,7 @@ import {
   MDBCarouselElement,
   MDBCarouselCaption,
 } from 'mdb-react-ui-kit';
+import CarouselHomepage from '../utilities/carouselHomepage';
 
 export default function Login(props) {
   const message = useSelector((state) => state.message);
@@ -55,7 +56,7 @@ export default function Login(props) {
         const loggedInUser = JSON.parse(localStorage.getItem('user'));
 
         // if (loggedInUser.roleName === props.roleName) {
-        navigate(`/${loggedInUser.roleName.toLowerCase()}/list`);
+        navigate(`/${loggedInUser.roleName.toLowerCase()}`);
         // } else {
         //   dispatch(logout());
         //   dispatch(setMessage("User cannot access this page."));
@@ -78,33 +79,7 @@ export default function Login(props) {
     <>
       <MDBRow>
         <MDBCol md='8'>
-          <MDBCarousel showIndicators showControls fade>
-            <MDBCarouselInner>
-              <MDBCarouselItem className='active'>
-                <MDBCarouselElement src='/images/holder.jpg' />
-                <MDBCarouselCaption>
-                  <h5>Holder</h5>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                </MDBCarouselCaption>
-              </MDBCarouselItem>
-
-              <MDBCarouselItem>
-                <MDBCarouselElement src='/images/issuer.jpg' />
-                <MDBCarouselCaption>
-                  <h5>Issuer</h5>
-                  <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                </MDBCarouselCaption>
-              </MDBCarouselItem>
-
-              <MDBCarouselItem>
-                <MDBCarouselElement src='/images/verifier.jpg' />
-                <MDBCarouselCaption>
-                  <h5>Verifier</h5>
-                  <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-                </MDBCarouselCaption>
-              </MDBCarouselItem>
-            </MDBCarouselInner>
-          </MDBCarousel>
+          <CarouselHomepage />
         </MDBCol>
         <MDBCol md='4'>
           <MDBCard className='mb-3' border='primary'>

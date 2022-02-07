@@ -10,17 +10,17 @@ import {
   MDBBtn,
 } from 'mdb-react-ui-kit';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faList } from '@fortawesome/free-solid-svg-icons';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
-export default function CardReports({ title, link, text }) {
+export default function CardRequest({ title, link, text }) {
 
   return (
     <>
       <Link to={link ? link : "/verifier/"}>
-        <MDBCard background='primary' className='text-white hover-shadow' style={{ maxWidth: '500px' }}>
+        <MDBCard background='primary' className='text-white hover-shadow mb-3' style={{ maxWidth: '500px' }}>
           <MDBRow className='g-0'>
             <MDBCol md='4' className='p-3 text-center'>
-              <FontAwesomeIcon icon={faList} size='5x' />
+              <FontAwesomeIcon icon={faPlus} size='5x' />
             </MDBCol>
             <MDBCol md='8'>
               <MDBCardBody>

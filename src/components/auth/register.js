@@ -26,6 +26,7 @@ export default function Register(props) {
   const initialUserState = {
     username: "",
     password: "",
+    nationalId: "",
     confirmPassword: "",
   };
 
@@ -43,7 +44,7 @@ export default function Register(props) {
 
     setLoading(true);
 
-    const { username, password, confirmPassword } = user;
+    const { username, password, confirmPassword, nationalId } = user;
 
     if (password !== confirmPassword) {
       dispatch(
@@ -53,7 +54,7 @@ export default function Register(props) {
       setLoading(false);
     } else {
       dispatch(
-        register(username, password, props.roleName)
+        register(username, password, props.roleName, nationalId)
       )
         .then(() => {
           setSuccesful(true);
@@ -66,6 +67,10 @@ export default function Register(props) {
         .catch(() => {
           setSuccesful(false);
           setLoading(false);
+
+          dispatch(
+            setMessage("An unexpected error has occured.")
+          );
         });
     }
 
@@ -94,6 +99,14 @@ export default function Register(props) {
                   name='username'
                   value={user.username}
                   onChange={handleInputChange} />
+                  <MDBInput
+                    required
+                    className='mb-4'
+                    id='nationalId'
+                    label='National Id'
+                    name='nationalId'
+                    value={user.nationalId}
+                    onChange={handleInputChange} />
                 <MDBInput
                   required
                   className='mb-4'
@@ -159,6 +172,18 @@ export default function Register(props) {
                 placeholder="Username"
                 name="username"
                 value={user.username}
+                onChange={handleInputChange}
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="nationalId">
+              <Form.Label>National Id</Form.Label>
+              <Form.Control
+                required
+                type="text"
+                placeholder="National Id"
+                name="nationalId"
+                value={user.nationalId}
                 onChange={handleInputChange}
               />
             </Form.Group>

@@ -3,12 +3,15 @@ import {
   MDBBreadcrumb,
   MDBBreadcrumbItem
 } from "mdb-react-ui-kit"
+import { Link } from "react-router-dom"
 
 export default function Breadcrumb({ role, page }) {
   return (
     <MDBBreadcrumb>
       <MDBBreadcrumbItem>
-        <a href={`/${role.toLowerCase()}/`}>{role}</a>
+        <Link to={`/${role.toLowerCase()}/`}>
+          {role}
+        </Link>
       </MDBBreadcrumbItem>
       <MDBBreadcrumbItem>
         {page}

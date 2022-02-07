@@ -7,11 +7,11 @@ import { Card, Form, Row, Col } from "react-bootstrap";
 
 import { getRecordDetail, removeSelectedRecord } from "../../actions/record";
 
-export default function CreditScore() {
+export default function CreditScore({ nationalId }) {
   const user = useSelector((state) => state.auth.user);
   const records = useSelector((state) => state.record.selectedRecords);
 
-  const { nationalId } = useParams();
+  const { nationalIdParams } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -21,11 +21,12 @@ export default function CreditScore() {
       navigate("/");
     } else {
       if (nationalId && nationalId !== "") dispatch(getRecordDetail(nationalId, "Credit Score"));
+      if (nationalIdParams && nationalIdParams !== "") dispatch(getRecordDetail(nationalIdParams, "Credit Score"));
     }
 
-    return () => {
-      dispatch(removeSelectedRecord());
-    }
+    // return () => {
+    //   dispatch(removeSelectedRecord());
+    // }
 
   }, [user, navigate, dispatch, nationalId]);
 
@@ -59,7 +60,9 @@ export default function CreditScore() {
                     Account Number
                   </Form.Label>
                   <Col sm="3">
-                    <Form.Control readOnly defaultValue={record.accountNumber} />
+                    <Form.Control readOnly
+                      defaultValue={record.accountNumber ? 'xxx-xxx-' + record.accountNumber.substr(record.accountNumber.length - 3) : ""}
+                    />
                   </Col>
                 </Form.Group>
 

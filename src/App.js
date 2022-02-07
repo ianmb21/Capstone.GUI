@@ -9,7 +9,9 @@ import Request from "./components/holder/request";
 import HolderHomepage from "./components/holder/";
 import HolderRequestsList from "./components/holder/requestsList";
 import IssuerRequestsList from "./components/issuer/requestsList";
+import VerifierHomepage from "./components/verifier";
 import VerifierRequestsList from "./components/verifier/requestsList";
+import VerifierRequest from "./components/verifier/verifierRequest";
 import IdentityDetail from "./components/record/identityDetail";
 import CriminalRecord from "./components/record/criminalRecord";
 import EducationRecord from "./components/record/educationRecord";
@@ -50,7 +52,7 @@ export default function App() {
     <Router>
       <MDBNavbar expand='lg' dark bgColor='dark' className='mb-3'>
         <MDBContainer fluid>
-          <MDBNavbarBrand>APPDS</MDBNavbarBrand>
+          <MDBNavbarBrand>{user && user.roleName ? user.roleName : "APPDS"}</MDBNavbarBrand>
 
             <MDBNavbarNav right fullWidth={false} className='mb-2 mb-lg-0'>
               {user && (
@@ -71,29 +73,6 @@ export default function App() {
         </MDBContainer>
       </MDBNavbar>
 
-      {/* <Navbar bg="dark" variant="dark" className="mb-3">
-        <Container>
-          <Navbar.Brand>APPDS</Navbar.Brand>
-
-          <Nav className="me-auto">
-            {!user && (
-              <>
-                <Nav.Link as={NavLink} to="/holder/list">Holder</Nav.Link>
-                <Nav.Link as={NavLink} to="/issuer/list">Issuer</Nav.Link>
-                <Nav.Link as={NavLink} to="/verifier/list">Verifier</Nav.Link>
-              </>
-            )}
-          </Nav>
-
-          {(user && (!Array.isArray(selectedRecords) || !selectedRecords.length)) && (
-            <Nav>
-              <NavDropdown title={user.username} id="collasible-nav-dropdown">
-                <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
-              </NavDropdown>
-            </Nav>
-          )}
-        </Container>
-      </Navbar> */}
       <MDBContainer fluid>
         <Routes>
           <Route path="/" element={<Login roleName="Holder" />} />
@@ -105,17 +84,20 @@ export default function App() {
 
           {/* <Route path="/issuer/login" element={<Login roleName="Issuer" />} />
           <Route path="/issuer/register" element={<Register roleName="Issuer" />} /> */}
+          <Route path="/issuer" element={<IssuerRequestsList />} />
           <Route path="/issuer/list" element={<IssuerRequestsList />} />
 
           {/* <Route path="/verifier/login" element={<Login roleName="Verifier" />} />
           <Route path="/verifier/register" element={<Register roleName="Verifier" />} /> */}
+          <Route path="/verifier/" element={<VerifierHomepage />} />
           <Route path="/verifier/list" element={<VerifierRequestsList />} />
+          <Route path="/verifier/request" element={<VerifierRequest />} />
 
-          <Route path="/record/Identity%20Detail/:nationalId" element={<IdentityDetail />} />
-          <Route path="/record/Criminal%20Record/:nationalId" element={<CriminalRecord />} />
-          <Route path="/record/Education%20Record/:nationalId" element={<EducationRecord />} />
-          <Route path="/record/Employment%20History/:nationalId" element={<EmploymentHistory />} />
-          <Route path="/record/Credit%20Score/:nationalId" element={<CreditScore />} />
+          <Route path="/record/Identity%20Detail/:nationalIdParams" element={<IdentityDetail />} />
+          <Route path="/record/Criminal%20Record/:nationalIdParams" element={<CriminalRecord />} />
+          <Route path="/record/Education%20Record/:nationalIdParams" element={<EducationRecord />} />
+          <Route path="/record/Employment%20History/:nationalIdParams" element={<EmploymentHistory />} />
+          <Route path="/record/Credit%20Score/:nationalIdParams" element={<CreditScore />} />
         </Routes>
       </MDBContainer>
 

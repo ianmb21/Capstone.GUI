@@ -1,6 +1,7 @@
 import axios from "axios";
+import authHeader from './auth-header';
 
-const API_URL = "http://20.24.121.187/api/Auth/";
+const API_URL = "http://52.154.202.96/api/Auth/";
 
 class AuthService {
   login(username, password) {
@@ -23,13 +24,18 @@ class AuthService {
       });
   }
 
-  register(username, password, roleName) {
+  register(username, password, roleName, nationalId) {
     return axios.post(API_URL + "register", {
       username,
       password,
       roleName,
+      nationalId,
     });
   }
+
+  getNationalId(userId) {
+    return axios.get(API_URL + "getNationalId/" + userId, { headers: authHeader() });
+  };
 }
 
 export default new AuthService();
