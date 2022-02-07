@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from 'react-router-dom';
 
 import DataTable from 'react-data-table-component';
-import { Breadcrumb, Row, Col, Button, Modal, Form, Alert } from 'react-bootstrap';
+import { Row, Col, Button, Modal, Form, Alert } from 'react-bootstrap';
+import Breadcrumb from '../utilities/breadcrumb';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faPlusCircle, faFileAlt } from '@fortawesome/free-solid-svg-icons';
 
 import { getRequests } from "../../actions/holder";
+import { MDBBtn } from 'mdb-react-ui-kit';
 
 export default function RequestsLists() {
   const user = useSelector((state) => state.auth.user);
@@ -35,18 +37,22 @@ export default function RequestsLists() {
     {
       name: 'Record Type',
       selector: row => row.recordTypeName,
+      sortable: true,
     },
     {
       name: 'National Id',
       selector: row => row.nationalId,
+      sortable: true,
     },
     {
       name: 'Status',
       selector: row => row.requestStatus,
+      sortable: true,
     },
     {
       name: 'Date Requested',
       selector: row => row.dateRequested,
+      sortable: true,
     },
     {
       button: true,
@@ -67,13 +73,10 @@ export default function RequestsLists() {
 
   return (
     <>
-      <Breadcrumb className="mb-3">
-        <Breadcrumb.Item active>Holder</Breadcrumb.Item>
-        <Breadcrumb.Item active>Requests List</Breadcrumb.Item>
-      </Breadcrumb>
+      <Breadcrumb role='Holder' page='Requests List' />
 
       <Link to="/holder/request">
-        <Button variant="success" className="mb-3"><FontAwesomeIcon icon={faPlusCircle} /> Request Record</Button>
+        <MDBBtn color='primary' block><FontAwesomeIcon icon={faPlusCircle} /> Request Record</MDBBtn>
       </Link>
 
       <Row>
@@ -82,6 +85,8 @@ export default function RequestsLists() {
             pagination
             columns={columns}
             data={requests}
+            highlightOnHover
+            striped
           />
         </Col>
       </Row>
