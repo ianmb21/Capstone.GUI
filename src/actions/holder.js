@@ -5,9 +5,9 @@ import {
 
 import HolderService from "../services/holderService";
 
-export const getRequests = (userId) => async (dispatch) => {
+export const getRequests = (userId, requestStatus='All') => async (dispatch) => {
   try {
-    const response = await HolderService.getRequests(userId);
+    const response = await HolderService.getRequests(userId, requestStatus);
 
     dispatch({
       type: GET_HOLDER_REQUESTS,

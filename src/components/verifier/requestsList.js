@@ -28,6 +28,30 @@ export default function RequestsLists() {
     setCurrentRow(row);
   };
 
+  const handleSelect = (e) => {
+    e.preventDefault();
+    alert(e.target.value);
+
+    setLoading(true);
+    dispatch(getRequests(e.target.value))
+    .then(() => {
+      setLoading(false);
+      //dispatch(setMessage("Request/s has been successfully created."));
+    })
+    .catch((error) => {
+      console.log(error);
+      setLoading(false);
+    });
+  };
+
+  const requestStatusList = [{id: 'All', value: 'All'}, 
+  {id: 'New Request', value: 'New Request'}, 
+  {id: 'Rejected', value: 'Rejected'}, 
+  {id: 'Approved', value: 'Approved'}, 
+  {id: 'Revoked', value: 'Revoked'}, 
+  {id: 'Request Confirmation', value: 'Request Confirmation'}, 
+  {id: 'For Verification', value: 'For Verification'}];
+
   const ActionComponent = ({ row, onClick }) => {
     const clickHandler = () => onClick(row);
 
@@ -90,13 +114,11 @@ export default function RequestsLists() {
       })
       .catch((error) => {
         console.log(error);
-
         setLoading(false);
       });
   };
 
   useEffect(() => {
-
     if (!user) {
       // navigate("/verifier/login");
       navigate("/");
@@ -122,6 +144,17 @@ export default function RequestsLists() {
           {message}
         </Alert>
       )}
+
+      <Form.Select aria-label="Default select example" onChange={(e) => handleSelect(e) }>
+          {
+              requestStatusList.map((items) => {
+                return (
+                  <option value={items.id}>{items.value}</option>
+                );
+              })
+          }          
+      </Form.Select>  
+
 
       <Row>
         <Col>

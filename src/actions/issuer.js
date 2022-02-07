@@ -5,9 +5,9 @@ import {
 
 import IssuerService from "../services/issuerService";
 
-export const getRequests = () => async (dispatch) => {
+export const getRequests = (requestStatus = 'All') => async (dispatch) => {
   try {
-    const response = await IssuerService.getRequests();
+    const response = await IssuerService.getRequests(requestStatus);
 
     dispatch({
       type: GET_ISSUER_REQUESTS,

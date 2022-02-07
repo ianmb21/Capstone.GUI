@@ -3,8 +3,8 @@ import authHeader from './auth-header';
 
 const API_URL = "http://52.154.202.96/api/Holder/";
 
-const getRequests = (userId) => {
-  return axios.get(API_URL + "getRequest/" + userId, { headers: authHeader() });
+const getRequests = (userId, requestStatus) => {
+  return axios.get(API_URL + "getRequest/" + userId + '/' + requestStatus, { headers: authHeader() });
 };
 
 const createRequest = (userId, nationalId, firstName, lastName, birthdate, requestStatus, recordTypeId) => {

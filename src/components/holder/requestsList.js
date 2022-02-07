@@ -18,12 +18,35 @@ export default function RequestsLists() {
 
   const [currentRow, setCurrentRow] = useState({});
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = (row) => {
     setShow(true);
     setCurrentRow(row);
   };
+
+  const handleSelect = (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+    dispatch(getRequests(user.userId, e.target.value))
+    .then(() => {
+      setLoading(false);
+    })
+    .catch((error) => {
+      console.log(error);
+      setLoading(false);
+    });
+  };
+  
+  const requestStatusList = [{id: 'All', value: 'All'}, 
+  {id: 'New Request', value: 'New Request'}, 
+  {id: 'Rejected', value: 'Rejected'}, 
+  {id: 'Approved', value: 'Approved'}, 
+  {id: 'Revoked', value: 'Revoked'}, 
+  {id: 'Request Confirmation', value: 'Request Confirmation'}, 
+  {id: 'For Verification', value: 'For Verification'}];
 
   const ActionComponent = ({ row, onClick }) => {
     const clickHandler = () => onClick(row);
@@ -60,7 +83,7 @@ export default function RequestsLists() {
       // navigate("/holder/login");
       navigate("/");
     } else {
-      dispatch(getRequests(user.userId));
+      dispatch(getRequests(user.userId, 'All'));
     }
 
   }, [user, navigate, dispatch]);
@@ -75,6 +98,16 @@ export default function RequestsLists() {
       <Link to="/holder/request">
         <Button variant="success" className="mb-3"><FontAwesomeIcon icon={faPlusCircle} /> Request Record</Button>
       </Link>
+
+      <Form.Select aria-label="Default select example" onChange={(e) => handleSelect(e) }>
+          {
+              requestStatusList.map((items) => {
+                return (
+                  <option value={items.id}>{items.value}</option>
+                );
+              })
+          }          
+      </Form.Select>        
 
       <Row>
         <Col>
