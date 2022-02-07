@@ -13,6 +13,7 @@ import CriminalRecord from "./components/record/criminalRecord";
 import EducationRecord from "./components/record/educationRecord";
 import EmploymentHistory from "./components/record/employmentHistory";
 import CreditScore from "./components/record/creditScore";
+import VerifierRequest from "./components/verifier/verifierRequest";
 
 export default function App() {
   const user = useSelector((state) => state.auth.user);
@@ -64,6 +65,7 @@ export default function App() {
           {/* <Route path="/verifier/login" element={<Login roleName="Verifier" />} />
           <Route path="/verifier/register" element={<Register roleName="Verifier" />} /> */}
           <Route path="/verifier/list" element={<VerifierRequestsList />} />
+          <Route path="/verifier/request" element={<VerifierRequest />} />
 
           <Route path="/record/Identity%20Detail/:nationalId" element={<IdentityDetail />} />
           <Route path="/record/Criminal%20Record/:nationalId" element={<CriminalRecord />} />

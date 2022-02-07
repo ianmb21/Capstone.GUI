@@ -19,9 +19,15 @@ const createRequest = (userId, nationalId, firstName, lastName, birthdate, reque
   }, { headers: authHeader() });
 };
 
+const updateRequestStatus = (data) => {
+  console.log(data);
+  return axios.put(API_URL + "updateRequestStatus", data, { headers: authHeader() });
+};
+
 const IssuerService = {
   getRequests,
   createRequest,
+  updateRequestStatus
 };
 
 export default IssuerService;

@@ -5,7 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
 import { Breadcrumb, Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faFileAlt, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faFileAlt, faThumbsUp, faThumbsDown, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { getRequests, updateRequest } from "../../actions/verifier";
 import { setMessage, clearMessage } from '../../actions/message';
@@ -54,9 +54,20 @@ export default function RequestsLists() {
 
   const ActionComponent = ({ row, onClick }) => {
     const clickHandler = () => onClick(row);
-
-    return <Button onClick={clickHandler}><FontAwesomeIcon icon={faInfoCircle} /></Button>;
+    const disabled = row.requestStatus === "Revoked" ? true : false;
+    
+    return <Button disabled={disabled} onClick={clickHandler}><FontAwesomeIcon icon={faInfoCircle} /></Button>;
   };
+
+  const conditionalRowStyles = [
+    {
+      when: row => row.requestStatus === "Revoked",
+      style: {
+        opacity: 0.5,
+        cursor: 'not-allowed',
+      },
+    }
+  ];
 
   const columns = [
     {
@@ -66,6 +77,14 @@ export default function RequestsLists() {
     {
       name: 'National Id',
       selector: row => row.nationalId,
+    },
+    {
+      name: 'First Name',
+      selector: row => row.firstName,
+    },
+    {
+      name: 'Last Name',
+      selector: row => row.lastName,
     },
     {
       name: 'Status',
@@ -139,6 +158,10 @@ export default function RequestsLists() {
         <Breadcrumb.Item active>Requests List</Breadcrumb.Item>
       </Breadcrumb>
 
+      <Link to="/verifier/request">
+        <Button variant="success" className="mb-3"><FontAwesomeIcon icon={faPlusCircle} /> Request Record</Button>
+      </Link>
+
       {message && (
         <Alert className="mb-3" variant="danger">
           {message}
@@ -162,6 +185,7 @@ export default function RequestsLists() {
             pagination
             columns={columns}
             data={requests}
+            conditionalRowStyles={conditionalRowStyles}
           />
         </Col>
       </Row>
@@ -255,7 +279,7 @@ export default function RequestsLists() {
 
         </Modal.Body>
         <Modal.Footer>
-          <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`} target="_blank">
+          <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`}>
             <Button variant="primary">
               <FontAwesomeIcon icon={faFileAlt} /> Show Record Details
             </Button>
