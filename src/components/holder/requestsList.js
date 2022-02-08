@@ -46,12 +46,13 @@ export default function RequestsLists() {
   };
 
   const requestStatusList = [{ id: 'All', value: 'All' },
-  { id: 'New Request', value: 'New Request' },
-  { id: 'Rejected', value: 'Rejected' },
+  { id: 'PendingHolder', value: 'PendingHolder' },
+  { id: 'RejectedIssuer', value: 'RejectedIssuer' },
+  { id: 'RejectedVerifier', value: 'RejectedVerifier' },
   { id: 'Approved', value: 'Approved' },
   { id: 'Revoked', value: 'Revoked' },
-  { id: 'Request Confirmation', value: 'Request Confirmation' },
-  { id: 'For Verification', value: 'For Verification' }];
+  { id: 'PendingIssuer', value: 'PendingIssuer' },
+  { id: 'PendingVerifier', value: 'PendingVerifier' }];
 
   const ActionComponent = ({ row, onClick }) => {
     const clickHandler = () => onClick(row);
@@ -234,7 +235,8 @@ export default function RequestsLists() {
         </Modal.Body>
 
         <Modal.Footer>
-          {(currentRow.requestStatus === "For Verification" || currentRow.requestStatus === "Approved") &&
+          {(currentRow.requestStatus === "PendingVerifier" || currentRow.requestStatus === "Approved" || 
+          (currentRow.requestStatus === "PendingHolder" && currentRow.issuedBy !== null)) &&
             (
               <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`} target="_blank">
                 <Button variant="primary">
@@ -244,9 +246,9 @@ export default function RequestsLists() {
             )
           }
           {
-            (currentRow.hasRecord && currentRow.requestStatus === "Request Confirmation") ?
+            (currentRow.hasRecord && currentRow.requestStatus === "PendingHolder") ?
               (
-                <Button variant="primary" disabled={loading} onClick={() => updateHolderRequestStatus("For Verification")}>
+                <Button variant="primary" disabled={loading} onClick={() => updateHolderRequestStatus("PendingVerifier")}>
                   {loading ? (
                     <>
                       <Spinner
@@ -263,9 +265,9 @@ export default function RequestsLists() {
                   )}
                 </Button>
               )
-              : (!currentRow.hasRecord && currentRow.requestStatus === "Request Confirmation") ?
+              : (!currentRow.hasRecord && currentRow.requestStatus === "PendingHolder") ?
                 (
-                  <Button variant="primary" disabled={loading} onClick={() => updateHolderRequestStatus("New Request")}>
+                  <Button variant="primary" disabled={loading} onClick={() => updateHolderRequestStatus("PendingIssuer")}>
                     {loading ? (
                       <>
                         <Spinner
@@ -282,7 +284,7 @@ export default function RequestsLists() {
                     )}
                   </Button>
                 )
-                : (currentRow.requestStatus === "For Verification") ?
+                : (currentRow.requestStatus === "PendingVerifier") ?
                   (
                     <Button variant="danger" disabled={loading} onClick={() => updateHolderRequestStatus("Revoked")}>
                       {loading ? (

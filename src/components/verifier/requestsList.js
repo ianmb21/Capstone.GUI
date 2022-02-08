@@ -44,13 +44,14 @@ export default function RequestsLists() {
     });
   };
 
-  const requestStatusList = [{id: 'All', value: 'All'}, 
-  {id: 'New Request', value: 'New Request'}, 
-  {id: 'Rejected', value: 'Rejected'}, 
-  {id: 'Approved', value: 'Approved'}, 
-  {id: 'Revoked', value: 'Revoked'}, 
-  {id: 'Request Confirmation', value: 'Request Confirmation'}, 
-  {id: 'For Verification', value: 'For Verification'}];
+  const requestStatusList = [{ id: 'All', value: 'All' },
+  { id: 'PendingHolder', value: 'PendingHolder' },
+  { id: 'RejectedIssuer', value: 'RejectedIssuer' },
+  { id: 'RejectedVerifier', value: 'RejectedVerifier' },
+  { id: 'Approved', value: 'Approved' },
+  { id: 'Revoked', value: 'Revoked' },
+  { id: 'PendingIssuer', value: 'PendingIssuer' },
+  { id: 'PendingVerifier', value: 'PendingVerifier' }];
 
   const ActionComponent = ({ row, onClick }) => {
     const clickHandler = () => onClick(row);
@@ -280,45 +281,54 @@ export default function RequestsLists() {
 
         </Modal.Body>
         <Modal.Footer>
-          <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`}>
+          {/* <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`}>
             <Button variant="primary">
               <FontAwesomeIcon icon={faFileAlt} /> Show Record Details
             </Button>
-          </Link>
+          </Link> */}
+          {(currentRow.requestStatus === "PendingVerifier" || currentRow.requestStatus === "Approved") &&
+            (
+              <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`}>
+                <Button variant="primary">
+                  <FontAwesomeIcon icon={faFileAlt} /> Show Record Details
+                </Button>
+              </Link>
+            )
+          }
 
-          <Button variant="success" disabled={loading} onClick={() => updateStatusAndRemarks("Approved")}>
-            {loading ? (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />
-                {" "}Loading...
-              </>
-            ) : (
-              <><FontAwesomeIcon icon={faThumbsUp} /> Approve</>
-            )}
-          </Button>
-
-          <Button variant="danger" disabled={loading} onClick={() => updateStatusAndRemarks("Rejected")}>
-            {loading ? (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />
-                {" "}Loading...
-              </>
-            ) : (
-              <><FontAwesomeIcon icon={faThumbsDown} /> Reject</>
-            )}
-          </Button>
+          {(currentRow.requestStatus === "PendingVerifier") &&
+            (
+              <><Button variant="success" disabled={loading} onClick={() => updateStatusAndRemarks("Approved")}>
+              {loading ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true" />
+                  {" "}Loading...
+                </>
+              ) : (
+                <><FontAwesomeIcon icon={faThumbsUp} /> Approve</>
+              )}
+            </Button><Button variant="danger" disabled={loading} onClick={() => updateStatusAndRemarks("Rejected")}>
+                {loading ? (
+                  <>
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true" />
+                    {" "}Loading...
+                  </>
+                ) : (
+                  <><FontAwesomeIcon icon={faThumbsDown} /> Reject</>
+                )}
+              </Button></>
+            )
+          }
         </Modal.Footer>
       </Modal>
 
