@@ -15,7 +15,7 @@ const searchHolder = (firstName, lastName) => {
   return axios.post(API_URL + "searchHolder", {firstName, lastName}, { headers: authHeader() });
 };
 
-const createRequest = (userId, nationalId, firstName, lastName, birthdate, requestStatus, recordTypeId, Remarks, holderId) => {
+const createRequest = (userId, nationalId, firstName, lastName, birthdate, requestStatus, recordTypeId, Remarks, holderId, verifiedBy) => {
   return axios.post(API_URL + "createRequest", {
     userId,
     nationalId,
@@ -26,6 +26,7 @@ const createRequest = (userId, nationalId, firstName, lastName, birthdate, reque
     recordTypeId,
     Remarks,
     holderId,
+    verifiedBy,
   }, { headers: authHeader() });
 };
 

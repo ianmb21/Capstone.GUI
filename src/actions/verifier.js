@@ -56,9 +56,9 @@ export const searchHolder = (firstName, lastName) => async (dispatch) => {
   }
 };
 
-export const createRequest = (userId, nationalId, firstName, lastName, birthdate, recordTypeIds, Remarks, holderId) => async (dispatch) => {
+export const createRequest = (userId, nationalId, firstName, lastName, birthdate, recordTypeIds, Remarks, holderId, verifiedBy) => async (dispatch) => {
   try {
-    const response = await VerifierService.createRequest(userId, nationalId, firstName, lastName, birthdate, "PendingHolder", recordTypeIds, Remarks, holderId);
+    const response = await VerifierService.createRequest(userId, nationalId, firstName, lastName, birthdate, "PendingHolder", recordTypeIds, Remarks, holderId, verifiedBy);
 
     dispatch({
       type: CREATE_VERIFIER_REQUEST,
