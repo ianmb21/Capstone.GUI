@@ -17,7 +17,7 @@ export default function Index() {
     const filteredRequest = requests.filter(
       request =>
         request.recordTypeName == recordTypeName &&
-        (request.requestStatus === 'PendingVerifier' || request.requestStatus === 'Approved')
+        (request.requestStatus === 'PendingVerifier' || request.requestStatus === 'Approved' || request.issuedBy !== null)
     );
 
     console.log(filteredRequest)
