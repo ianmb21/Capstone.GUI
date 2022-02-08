@@ -27,7 +27,7 @@ export default function RequestsLists() {
   const handleShow = (row) => {
     setShow(true);
     setCurrentRow(row);
-    row.requestStatus === "For Verification" ?
+    row.requestStatus === "PendingVerifier" ?
       setReadOnly(false) : setReadOnly(true);
   };
 
@@ -177,7 +177,8 @@ export default function RequestsLists() {
 
         <Modal.Header closeButton>
           <Modal.Title>
-            {currentRow.recordTypeName}
+            {/* {currentRow.recordTypeName} */}
+            Request Details
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -254,7 +255,7 @@ export default function RequestsLists() {
           {(currentRow.requestStatus === "PendingVerifier" || currentRow.requestStatus === "Approved" || 
           (currentRow.requestStatus === "PendingHolder" && currentRow.issuedBy !== null)) &&
             (
-              <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`} target="_blank">
+              <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`}>
                 <Button variant="primary">
                   <FontAwesomeIcon icon={faFileAlt} /> Show Record Details
                 </Button>
