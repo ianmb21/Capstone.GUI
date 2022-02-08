@@ -265,40 +265,40 @@ export default function RequestsLists() {
               <FontAwesomeIcon icon={faFileAlt} /> Show Record Details
             </Button>
           </Link>
-
-          <Button variant="success" disabled={loading} onClick={() => updateStatusAndRemarks("PendingHolder")}>
-            {loading ? (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />
-                {" "}Loading...
-              </>
-            ) : (
-              <><FontAwesomeIcon icon={faThumbsUp} /> Approve</>
-            )}
-          </Button>
-
-          <Button variant="danger" disabled={loading} onClick={() => updateStatusAndRemarks("Rejected")}>
-            {loading ? (
-              <>
-                <Spinner
-                  as="span"
-                  animation="border"
-                  size="sm"
-                  role="status"
-                  aria-hidden="true"
-                />
-                {" "}Loading...
-              </>
-            ) : (
-              <><FontAwesomeIcon icon={faThumbsDown} /> Reject</>
-            )}
-          </Button>
+            
+          {(currentRow.requestStatus === "PendingIssuer") &&
+            (
+              <><Button variant="success" disabled={loading} onClick={() => updateStatusAndRemarks("PendingHolder")}>
+              {loading ? (
+                <>
+                  <Spinner
+                    as="span"
+                    animation="border"
+                    size="sm"
+                    role="status"
+                    aria-hidden="true" />
+                  {" "}Loading...
+                </>
+              ) : (
+                <><FontAwesomeIcon icon={faThumbsUp} /> Approve</>
+              )}
+            </Button><Button variant="danger" disabled={loading} onClick={() => updateStatusAndRemarks("Rejected")}>
+                {loading ? (
+                  <>
+                    <Spinner
+                      as="span"
+                      animation="border"
+                      size="sm"
+                      role="status"
+                      aria-hidden="true" />
+                    {" "}Loading...
+                  </>
+                ) : (
+                  <><FontAwesomeIcon icon={faThumbsDown} /> Reject</>
+                )}
+              </Button></>
+            )
+          }
         </Modal.Footer>
       </Modal>
 
