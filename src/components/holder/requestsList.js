@@ -62,6 +62,14 @@ export default function RequestsLists() {
 
   const columns = [
     {
+      name: 'Request ID',
+      selector: row => row.requestId,
+    },
+    {
+      name: 'Requested by',
+      selector: row => row.verifiedBy,
+    },
+    {
       name: 'Record Type',
       selector: row => row.recordTypeName,
       sortable: true,
@@ -77,9 +85,17 @@ export default function RequestsLists() {
       sortable: true,
     },
     {
+      name: 'Purpose',
+      selector: row => row.purpose,
+    },
+    {
       name: 'Date Requested',
       selector: row => row.dateRequested,
       sortable: true,
+    },
+    {
+      name: 'Remarks',
+      selector: row => row.remarks,
     },
     {
       button: true,

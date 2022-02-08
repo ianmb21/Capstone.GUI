@@ -72,12 +72,20 @@ export default function RequestsLists() {
 
   const columns = [
     {
+      name: 'Request ID',
+      selector: row => row.requestId,
+    },
+    {
+      name: 'Requested by',
+      selector: row => row.verifiedBy,
+    },
+    {
       name: 'Record Type',
       selector: row => row.recordTypeName,
     },
     {
       name: 'National Id',
-      selector: row => row.nationalId,
+      selector: row => row.nationalId ? '*****' + row.nationalId.substr(row.nationalId.length - 4) : ""
     },
     {
       name: 'First Name',
@@ -92,8 +100,16 @@ export default function RequestsLists() {
       selector: row => row.requestStatus,
     },
     {
+      name: 'Purpose',
+      selector: row => row.purpose,
+    },
+    {
       name: 'Date Requested',
       selector: row => row.dateRequested,
+    },
+    {
+      name: 'Remarks',
+      selector: row => row.remarks,
     },
     {
       button: true,
@@ -118,6 +134,7 @@ export default function RequestsLists() {
       birthDate: new Date().toISOString().slice(0, 10),
       requestStatus: status,
       remarks: currentRow.remarks,
+      purpose: currentRow.purpose,
       recordTypeId: [currentRow.recordTypeId]
     }
 
@@ -213,7 +230,7 @@ export default function RequestsLists() {
                     <Form.Label>
                       National Id
                     </Form.Label>
-                    <Form.Control size="sm" readOnly defaultValue={currentRow.nationalId} />
+                    <Form.Control size="sm" readOnly defaultValue={currentRow.nationalId ? '*****' + currentRow.nationalId.substr(currentRow.nationalId.length - 4) : ""} />
                   </Form.Group>
                   <Form.Group as={Col} md="4" controlId="requestStatus">
                     <Form.Label>

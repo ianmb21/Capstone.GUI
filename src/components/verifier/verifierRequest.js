@@ -52,6 +52,10 @@ export default function VerifierRequest() {
 
   const columns = [
     {
+        name: "National ID",
+        selector: row => '*****' + row.nationalId.substr(row.nationalId.length - 4)
+    },
+    {
       name: "First Name",
       selector: row => row.firstName,
     },
@@ -118,7 +122,7 @@ export default function VerifierRequest() {
       dispatch(setMessage("Error: Please input purpose details."));
       setLoading(false);
     } else {
-      dispatch(createRequest(user.userId, nationalId, firstName, lastName, birthdate, recordTypeIds, remarks, holderId))
+      dispatch(createRequest(user.userId, nationalId, firstName, lastName, birthdate, recordTypeIds, remarks, holderId, user.username))
 
         .then(() => {
 
