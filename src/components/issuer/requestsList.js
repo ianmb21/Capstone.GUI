@@ -4,6 +4,9 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import DataTable from 'react-data-table-component';
 import { Breadcrumb, Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import Dropdown from 'react-bootstrap/Dropdown';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faFileAlt, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 
@@ -22,11 +25,33 @@ export default function RequestsLists() {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [requestStatus, setRequestStatus] = useState('All');
+
   const handleClose = () => setShow(false);
   const handleShow = (row) => {
     setShow(true);
     setCurrentRow(row);
   };
+  const handleSelect = (e) => {
+    e.preventDefault();
+    //alert(e.target.value);
+
+    setLoading(true);
+    dispatch(getRequests(e.target.value))
+    .then(() => {
+      setLoading(false);
+      //dispatch(setMessage("Request/s has been successfully created."));
+    })
+    .catch((error) => {
+      console.log(error);
+      setLoading(false);
+    });
+    
+    
+
+  };
+  const requestStatusList = [{id: 'All', value: 'All'}, {id: 'New Request', value: 'New Request'}, {id: 'Rejected', value: 'Rejected'}, {id: 'Approved', value: 'Approved'}, {id: 'Revoked', value: 'Revoked'}, {id: 'Request Confirmation', value: 'Request Confirmation'}, , {id: 'For Verification', value: 'For Verification'}];
+
 
   const ActionComponent = ({ row, onClick }) => {
     const clickHandler = () => onClick(row);
@@ -79,6 +104,8 @@ export default function RequestsLists() {
       recordTypeId: [currentRow.recordTypeId]
     }
 
+    
+
     console.log(data);
 
     dispatch(updateRequest(data))
@@ -121,18 +148,24 @@ export default function RequestsLists() {
         <Breadcrumb.Item active>Requests List</Breadcrumb.Item>
       </Breadcrumb>
 
-      <select>
-        <option>All</option>
-        <option>New Request</option>
-        <option>Revoke</option>
-        <option>Rejected</option>
-      </select>
 
       {message && (
         <Alert className="mb-3" variant="success">
           {message}
         </Alert>
       )}
+
+      <Form.Select aria-label="Default select example" onChange={(e) => handleSelect(e) }>
+          {
+              requestStatusList.map((items) => {
+                return (
+                  <option value={items.id}>{items.value}</option>
+                );
+              })
+          }          
+      </Form.Select>      
+
+
 
       <Row>
         <Col>
@@ -143,6 +176,8 @@ export default function RequestsLists() {
           />
         </Col>
       </Row>
+
+
 
       <Modal
         show={show}
@@ -259,6 +294,8 @@ export default function RequestsLists() {
           </Button>
         </Modal.Footer>
       </Modal>
+
+              
 
     </>
   );

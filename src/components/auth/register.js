@@ -6,6 +6,16 @@ import { Form, Button, Row, Col, Breadcrumb, Alert, Spinner } from 'react-bootst
 
 import { register } from '../../actions/auth';
 import { setMessage, clearMessage } from '../../actions/message';
+import {
+  MDBRow,
+  MDBCol,
+  MDBCard,
+  MDBCardHeader,
+  MDBCardBody,
+  MDBInput,
+  MDBBtn,
+  MDBSpinner,
+} from 'mdb-react-ui-kit';
 
 
 export default function Register(props) {
@@ -16,6 +26,7 @@ export default function Register(props) {
   const initialUserState = {
     username: "",
     password: "",
+    nationalId: "",
     confirmPassword: "",
   };
 
@@ -50,12 +61,16 @@ export default function Register(props) {
           setLoading(false);
 
           dispatch(
-            setMessage("User has been successfully registered.")
+            setMessage("Holder account has been successfully registered.")
           );
         })
         .catch(() => {
           setSuccesful(false);
           setLoading(false);
+
+          dispatch(
+            setMessage("An unexpected error has occured.")
+          );
         });
     }
 
@@ -69,7 +84,80 @@ export default function Register(props) {
 
   return (
     <>
-      <Breadcrumb>
+      <MDBRow>
+        <MDBCol lg='4'></MDBCol>
+        <MDBCol lg='4'>
+          <MDBCard border='primary'>
+            <MDBCardHeader>Create a Holder Account</MDBCardHeader>
+            <MDBCardBody>
+              <form onSubmit={handleRegister}>
+                <MDBInput
+                  required
+                  className='mb-4'
+                  id='username'
+                  label='Username'
+                  name='username'
+                  value={user.username}
+                  onChange={handleInputChange} />
+                  <MDBInput
+                    required
+                    className='mb-4'
+                    id='nationalId'
+                    label='National Id'
+                    name='nationalId'
+                    value={user.nationalId}
+                    onChange={handleInputChange} />
+                <MDBInput
+                  required
+                  className='mb-4'
+                  type='password'
+                  id='password'
+                  label='Password'
+                  name='password'
+                  value={user.password}
+                  onChange={handleInputChange} />
+                <MDBInput
+                  required
+                  className='mb-5'
+                  type='password'
+                  id='confirmPassword'
+                  label='Confirm Password'
+                  name='confirmPassword'
+                  value={user.confirmPassword}
+                  onChange={handleInputChange} />
+
+                <MDBBtn type='submit' className='mb-2' disabled={loading} block>
+                  {loading ? (
+                    <>
+                      <MDBSpinner size='sm' className='me-2' color='light' />
+                      Loading...
+                    </>
+                  ) : (<>Register</>)
+                  }
+
+                </MDBBtn>
+
+                <Link to={`/`}>
+                  <MDBBtn color='link' block>
+                    Cancel
+                  </MDBBtn>
+                </Link>
+
+              </form>
+            </MDBCardBody>
+          </MDBCard>
+
+          {message && (
+            <Alert className='mt-3' variant={successful ? "primary" : "danger"}>
+              {message}
+            </Alert>
+          )}
+        </MDBCol>
+        <MDBCol lg='4'></MDBCol>
+      </MDBRow>
+
+
+      {/* <Breadcrumb>
         <Breadcrumb.Item active>{props.roleName}</Breadcrumb.Item>
         <Breadcrumb.Item active>Register</Breadcrumb.Item>
       </Breadcrumb>
@@ -141,19 +229,19 @@ export default function Register(props) {
             </Button>
 
             {" "}
-            {/* <Link to={`/${props.roleName.toLowerCase()}/login`}> */}
-            <Link to={`/`}>
-              <Button variant="secondary">Back</Button>
-            </Link>
+            <Link to={`/${props.roleName.toLowerCase()}/login`}> 
+      <Link to={`/`}>
+        <Button variant="secondary">Back</Button>
+      </Link>
 
-            {message && (
-              <Alert className='mt-3' variant={successful ? "primary" : "danger"}>
-                {message}
-              </Alert>
-            )}
-          </Form>
-        </Col>
-      </Row>
+      {message && (
+        <Alert className='mt-3' variant={successful ? "primary" : "danger"}>
+          {message}
+        </Alert>
+      )}
+    </Form>
+        </Col >
+      </Row > */}
     </>
   );
 }

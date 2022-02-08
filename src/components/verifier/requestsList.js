@@ -3,10 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from 'react-router-dom';
 
 import DataTable from 'react-data-table-component';
-import { Breadcrumb, Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
+import { Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faInfoCircle, faFileAlt, faThumbsUp, faThumbsDown, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faInfoCircle, faFileAlt, faThumbsUp, faThumbsDown, faPlusCircle, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
+import Breadcrumb from '../utilities/breadcrumb';
 import { getRequests, updateRequest } from "../../actions/verifier";
 import { setMessage, clearMessage } from '../../actions/message';
 
@@ -28,10 +29,33 @@ export default function RequestsLists() {
     setCurrentRow(row);
   };
 
+  const handleSelect = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    
+    dispatch(getRequests(e.target.value))
+    .then(() => {
+      setLoading(false);
+      //dispatch(setMessage("Request/s has been successfully created."));
+    })
+    .catch((error) => {
+      console.log(error);
+      setLoading(false);
+    });
+  };
+
+  const requestStatusList = [{id: 'All', value: 'All'}, 
+  {id: 'New Request', value: 'New Request'}, 
+  {id: 'Rejected', value: 'Rejected'}, 
+  {id: 'Approved', value: 'Approved'}, 
+  {id: 'Revoked', value: 'Revoked'}, 
+  {id: 'Request Confirmation', value: 'Request Confirmation'}, 
+  {id: 'For Verification', value: 'For Verification'}];
+
   const ActionComponent = ({ row, onClick }) => {
     const clickHandler = () => onClick(row);
     const disabled = row.requestStatus === "Revoked" ? true : false;
-    
+
     return <Button disabled={disabled} onClick={clickHandler}><FontAwesomeIcon icon={faInfoCircle} /></Button>;
   };
 
@@ -109,13 +133,11 @@ export default function RequestsLists() {
       })
       .catch((error) => {
         console.log(error);
-
         setLoading(false);
       });
   };
 
   useEffect(() => {
-
     if (!user) {
       // navigate("/verifier/login");
       navigate("/");
@@ -131,13 +153,11 @@ export default function RequestsLists() {
 
   return (
     <>
-      <Breadcrumb className="mb-3">
-        <Breadcrumb.Item active>Verifier</Breadcrumb.Item>
-        <Breadcrumb.Item active>Requests List</Breadcrumb.Item>
-      </Breadcrumb>
-
+      <Link to="/verifier">
+        <Button variant="link"><FontAwesomeIcon icon={faArrowLeft} /> Return to homepage</Button>
+      </Link>
       <Link to="/verifier/request">
-        <Button variant="success" className="mb-3"><FontAwesomeIcon icon={faPlusCircle} /> Request Record</Button>
+        <Button variant="success" className='flex-right'><FontAwesomeIcon icon={faPlusCircle} /> Request Record</Button>
       </Link>
 
       {message && (
@@ -146,13 +166,27 @@ export default function RequestsLists() {
         </Alert>
       )}
 
+      <Form.Select aria-label="Default select example" onChange={(e) => handleSelect(e) }>
+          {
+              requestStatusList.map((items) => {
+                return (
+                  <option value={items.id}>{items.value}</option>
+                );
+              })
+          }          
+      </Form.Select>  
+
+
       <Row>
         <Col>
           <DataTable
+            title='Requests List'
             pagination
             columns={columns}
             data={requests}
             conditionalRowStyles={conditionalRowStyles}
+            highlightOnHover
+            striped
           />
         </Col>
       </Row>
