@@ -50,7 +50,14 @@ export default function RequestsLists() {
     
 
   };
-  const requestStatusList = [{id: 'All', value: 'All'}, {id: 'New Request', value: 'New Request'}, {id: 'Rejected', value: 'Rejected'}, {id: 'Approved', value: 'Approved'}, {id: 'Revoked', value: 'Revoked'}, {id: 'Request Confirmation', value: 'Request Confirmation'}, , {id: 'For Verification', value: 'For Verification'}];
+  const requestStatusList = [{ id: 'All', value: 'All' },
+  { id: 'PendingHolder', value: 'PendingHolder' },
+  { id: 'RejectedIssuer', value: 'RejectedIssuer' },
+  { id: 'RejectedVerifier', value: 'RejectedVerifier' },
+  { id: 'Approved', value: 'Approved' },
+  { id: 'Revoked', value: 'Revoked' },
+  { id: 'PendingIssuer', value: 'PendingIssuer' },
+  { id: 'PendingVerifier', value: 'PendingVerifier' }];
 
 
   const ActionComponent = ({ row, onClick }) => {
@@ -259,7 +266,7 @@ export default function RequestsLists() {
             </Button>
           </Link>
 
-          <Button variant="success" disabled={loading} onClick={() => updateStatusAndRemarks("For Verification")}>
+          <Button variant="success" disabled={loading} onClick={() => updateStatusAndRemarks("PendingHolder")}>
             {loading ? (
               <>
                 <Spinner
