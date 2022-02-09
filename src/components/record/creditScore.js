@@ -45,7 +45,7 @@ export default function CreditScore({ nationalId }) {
                     National Id
                   </Form.Label>
                   <Col sm="10">
-                    <Form.Control readOnly defaultValue={nationalId} />
+                    <Form.Control readOnly defaultValue={record.nationalId} />
                   </Col>
                 </Form.Group>
 
