@@ -17,7 +17,7 @@ export default function CardReports({ title, link, text }) {
   return (
     <>
       <Link to={link ? link : "/verifier/"}>
-        <MDBCard background='primary' className='text-white hover-shadow' style={{ maxWidth: '500px' }}>
+        <MDBCard background='primary' className='text-white hover-shadow'>
           <MDBRow className='g-0'>
             <MDBCol md='4' className='p-3 text-center'>
               <FontAwesomeIcon icon={faList} size='5x' />
