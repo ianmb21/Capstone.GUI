@@ -17,7 +17,7 @@ export default function CardRequest({ title, link, text }) {
   return (
     <>
       <Link to={link ? link : "/verifier/"}>
-        <MDBCard background='primary' className='text-white hover-shadow mb-3' style={{ maxWidth: '500px' }}>
+        <MDBCard background='primary' className='text-white hover-shadow mb-3'>
           <MDBRow className='g-0'>
             <MDBCol md='4' className='p-3 text-center'>
               <FontAwesomeIcon icon={faPlus} size='5x' />

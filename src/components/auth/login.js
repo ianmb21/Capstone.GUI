@@ -21,9 +21,8 @@ import {
   MDBCarouselElement,
   MDBCarouselCaption,
 } from 'mdb-react-ui-kit';
-import CarouselHomepage from '../utilities/carouselHomepage';
 
-export default function Login(props) {
+export default function Login() {
   const message = useSelector((state) => state.message);
 
   const navigate = useNavigate();
@@ -55,12 +54,7 @@ export default function Login(props) {
       .then(() => {
         const loggedInUser = JSON.parse(localStorage.getItem('user'));
 
-        // if (loggedInUser.roleName === props.roleName) {
         navigate(`/${loggedInUser.roleName.toLowerCase()}`);
-        // } else {
-        //   dispatch(logout());
-        //   dispatch(setMessage("User cannot access this page."));
-        // }
 
         setLoading(false);
       })
@@ -79,7 +73,7 @@ export default function Login(props) {
     <>
       <MDBRow>
         <MDBCol md='8'>
-          <CarouselHomepage />
+          <img src="/images/verifiable_credentials.png" className='img-fluid' />
         </MDBCol>
         <MDBCol md='4'>
           <MDBCard className='mb-3' border='primary'>
@@ -132,114 +126,6 @@ export default function Login(props) {
           )}
         </MDBCol>
       </MDBRow>
-
-
-      {/* <Row className='mt-3'>
-        <Col md={8}>
-          <Carousel>
-            <Carousel.Item>
-              <img
-                className="d-block w-100"
-                src="/images/carousel.jpg"
-                alt="First slide"
-              />
-              <Carousel.Caption>
-                <h3>First slide label</h3>
-                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-              </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img
-                className="d-block w-100"
-                src="/images/carousel.jpg"
-                alt="Second slide"
-              />
-
-              <Carousel.Caption>
-                <h3>Second slide label</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-              </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-              <img
-                className="d-block w-100"
-                src="/images/carousel.jpg"
-                alt="Third slide"
-              />
-
-              <Carousel.Caption>
-                <h3>Third slide label</h3>
-                <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-              </Carousel.Caption>
-            </Carousel.Item>
-          </Carousel>
-        </Col>
-        <Col md={4}>
-          <Card>
-            <Card.Header>Login</Card.Header>
-            <Card.Body>
-
-              <Form onSubmit={handleLogin}>
-                <FloatingLabel label="Username" className="mb-3" controlId="username">
-                  <Form.Control
-                    required
-                    type="text"
-                    placeholder="Username"
-                    name="username"
-                    value={user.username}
-                    onChange={handleInputChange}
-                  />
-                </FloatingLabel>
-
-                <FloatingLabel label="Password" className="mb-3" controlId="password">
-                  <Form.Control
-                    required
-                    type="password"
-                    placeholder="Password"
-                    name="password"
-                    value={user.password}
-                    onChange={handleInputChange}
-                  />
-                </FloatingLabel>
-
-                <div className="d-grid gap-2">
-                  <Button type="submit" variant="primary" disabled={loading}>
-                    {loading ? (
-                      <>
-                        <Spinner
-                          as="span"
-                          animation="border"
-                          size="sm"
-                          role="status"
-                          aria-hidden="true"
-                        />
-                        {" "}Loading...
-                      </>
-                    ) :
-                      (
-                        <>Login</>
-                      )}
-                  </Button>
-                </div>
-
-                <Link to={`/${props.roleName.toLowerCase()}/register`}>
-                  <div className="d-grid gap-2">
-                    <Button variant="link">
-                      Create a holder account
-                    </Button>
-                  </div>
-                </Link>
-
-                {message && (
-                  <Alert className="mt-3" variant="danger">
-                    {message}
-                  </Alert>
-                )}
-              </Form>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row> */}
     </>
   );
 }

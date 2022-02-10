@@ -67,21 +67,24 @@ export default function CardRecords({ title, hasRecord, nationalId = "P1234567A"
       default:
         return '';
     }
-    
+
   }
 
   return (
     <>
-      <MDBCard border={hasRecord ? 'primary' : 'dark'} className='hover-shadow' style={{ maxWidth: '500px' }}>
+      <MDBCard
+        border={hasRecord ? 'light' : 'dark'}
+        background={hasRecord ? 'success' : 'light'}
+        className={hasRecord ? 'hover-shadow text-white' : 'hover-shadow'}>
         <MDBRow className='g-0'>
           <MDBCol md='4' className='p-3 text-center'>
-            <FontAwesomeIcon icon={getIcon(title)} size='8x' />
+            <FontAwesomeIcon icon={getIcon(title)} size='7x' />
           </MDBCol>
           <MDBCol md='8'>
             <MDBCardBody>
               <MDBCardTitle>{title}</MDBCardTitle>
               {hasRecord ? (
-                <MDBBtn color='primary' onClick={toggleShow}>See Record Details</MDBBtn>
+                <MDBBtn color='light' className='mt-4' onClick={toggleShow}>See Record Details</MDBBtn>
               ) : (
                 <MDBCardText>
                   <small className='text-muted'>No record found</small>

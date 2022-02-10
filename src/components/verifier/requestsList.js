@@ -218,7 +218,8 @@ export default function RequestsLists() {
 
         <Modal.Header closeButton>
           <Modal.Title>
-            {currentRow.recordTypeName}
+            {/* {currentRow.recordTypeName} */}
+            Request Details
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
