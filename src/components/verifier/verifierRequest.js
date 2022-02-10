@@ -167,7 +167,8 @@ export default function VerifierRequest() {
   useEffect(() => {
 
     if (!user) {
-      navigate("/verifier/login");
+      //navigate("/verifier/login");
+      navigate("/");
     } else {
       dispatch(searchHolder(search.firstName, search.lastName))
       dispatch(getRecordType(user.subRoleId));
