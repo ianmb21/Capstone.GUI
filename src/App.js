@@ -17,7 +17,6 @@ import CriminalRecord from "./components/record/criminalRecord";
 import EducationRecord from "./components/record/educationRecord";
 import EmploymentHistory from "./components/record/employmentHistory";
 import CreditScore from "./components/record/creditScore";
-import Sample from "./components/utilities/sample";
 
 import {
   MDBContainer,
@@ -99,8 +98,6 @@ export default function App() {
           <Route path="/record/Education%20Record/:nationalIdParams" element={<EducationRecord />} />
           <Route path="/record/Employment%20History/:nationalIdParams" element={<EmploymentHistory />} />
           <Route path="/record/Credit%20Score/:nationalIdParams" element={<CreditScore />} />
-
-          <Route path="/test" element={<Sample />} />
         </Routes>
       </MDBContainer>
 
