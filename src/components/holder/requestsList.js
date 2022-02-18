@@ -98,10 +98,6 @@ export default function RequestsLists() {
       selector: row => row.remarks,
     },
     {
-      name: 'Approval',
-      selector: row => row.approval,
-    },
-    {
       button: true,
       cell: (row) => <ActionComponent onClick={handleShow} row={row} />,
     },
