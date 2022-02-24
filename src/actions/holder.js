@@ -1,5 +1,6 @@
 import {
   GET_HOLDER_REQUESTS,
+  GET_NATIONAL_ID,
   CREATE_REQUEST,
   UPDATE_HOLDER_REQUEST_STATUS,
 } from "./types";
@@ -12,6 +13,19 @@ export const getRequests = (userId, requestStatus='All') => async (dispatch) => 
 
     dispatch({
       type: GET_HOLDER_REQUESTS,
+      payload: response.data,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getNationalId = (userId) => async (dispatch) => {
+  try {
+    const response = await HolderService.getNationalId(userId);
+
+    dispatch({
+      type: GET_NATIONAL_ID,
       payload: response.data,
     });
   } catch (error) {

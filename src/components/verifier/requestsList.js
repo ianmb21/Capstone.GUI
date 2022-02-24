@@ -7,7 +7,6 @@ import { Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faFileAlt, faThumbsUp, faThumbsDown, faPlusCircle, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
-import Breadcrumb from '../utilities/breadcrumb';
 import { getRequests, updateRequest } from "../../actions/verifier";
 import { setMessage, clearMessage } from '../../actions/message';
 
@@ -32,16 +31,15 @@ export default function RequestsLists() {
   const handleSelect = (e) => {
     e.preventDefault();
     setLoading(true);
-    
+
     dispatch(getRequests(e.target.value))
-    .then(() => {
-      setLoading(false);
-      //dispatch(setMessage("Request/s has been successfully created."));
-    })
-    .catch((error) => {
-      console.log(error);
-      setLoading(false);
-    });
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
   };
 
   const requestStatusList = [{ id: 'All', value: 'All' },
@@ -184,15 +182,15 @@ export default function RequestsLists() {
         </Alert>
       )}
 
-      <Form.Select aria-label="Default select example" onChange={(e) => handleSelect(e) }>
-          {
-              requestStatusList.map((items) => {
-                return (
-                  <option value={items.id}>{items.value}</option>
-                );
-              })
-          }          
-      </Form.Select>  
+      <Form.Select aria-label="Default select example" onChange={(e) => handleSelect(e)}>
+        {
+          requestStatusList.map((items) => {
+            return (
+              <option value={items.id}>{items.value}</option>
+            );
+          })
+        }
+      </Form.Select>
 
 
       <Row>
@@ -218,7 +216,6 @@ export default function RequestsLists() {
 
         <Modal.Header closeButton>
           <Modal.Title>
-            {/* {currentRow.recordTypeName} */}
             Request Details
           </Modal.Title>
         </Modal.Header>
@@ -287,7 +284,6 @@ export default function RequestsLists() {
                     </Form.Label>
                     <Form.Control
                       as="textarea"
-                      // defaultValue={currentRow.remarks ? currentRow.remarks : ""}
                       value={currentRow.remarks}
                       onChange={onChangeRemarks}
                     />
@@ -299,11 +295,6 @@ export default function RequestsLists() {
 
         </Modal.Body>
         <Modal.Footer>
-          {/* <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`}>
-            <Button variant="primary">
-              <FontAwesomeIcon icon={faFileAlt} /> Show Record Details
-            </Button>
-          </Link> */}
           {(currentRow.requestStatus === "PendingVerifier" || currentRow.requestStatus === "Approved") &&
             (
               <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`}>
@@ -317,20 +308,6 @@ export default function RequestsLists() {
           {(currentRow.requestStatus === "PendingVerifier") &&
             (
               <><Button variant="success" disabled={loading} onClick={() => updateStatusAndRemarks("Approved")}>
-              {loading ? (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true" />
-                  {" "}Loading...
-                </>
-              ) : (
-                <><FontAwesomeIcon icon={faThumbsUp} /> Approve</>
-              )}
-            </Button><Button variant="danger" disabled={loading} onClick={() => updateStatusAndRemarks("Rejected")}>
                 {loading ? (
                   <>
                     <Spinner
@@ -342,9 +319,23 @@ export default function RequestsLists() {
                     {" "}Loading...
                   </>
                 ) : (
-                  <><FontAwesomeIcon icon={faThumbsDown} /> Reject</>
+                  <><FontAwesomeIcon icon={faThumbsUp} /> Approve</>
                 )}
-              </Button></>
+              </Button><Button variant="danger" disabled={loading} onClick={() => updateStatusAndRemarks("Rejected")}>
+                  {loading ? (
+                    <>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true" />
+                      {" "}Loading...
+                    </>
+                  ) : (
+                    <><FontAwesomeIcon icon={faThumbsDown} /> Reject</>
+                  )}
+                </Button></>
             )
           }
         </Modal.Footer>

@@ -1,7 +1,6 @@
 import axios from "axios";
-import authHeader from './auth-header';
 
-const API_URL = "http://52.154.202.96/api/Auth/";
+const API_URL = `${process.env.REACT_APP_API_URL}/Auth/`;
 
 class AuthService {
   login(username, password) {
@@ -32,10 +31,6 @@ class AuthService {
       nationalId,
     });
   }
-
-  getNationalId(userId) {
-    return axios.get(API_URL + "getNationalId/" + userId, { headers: authHeader() });
-  };
 }
 
 export default new AuthService();

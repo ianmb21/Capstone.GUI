@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import {
   MDBCard,
   MDBRow,
@@ -10,26 +12,23 @@ import {
   MDBModalDialog,
   MDBModalContent,
   MDBModalHeader,
-  MDBModalTitle,
   MDBModalBody,
 } from 'mdb-react-ui-kit';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFingerprint, faMoneyCheckAlt, faGraduationCap, faBriefcase, faUserNinja, faBorderNone } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+
 import IdentityDetail from '../record/identityDetail';
 import CreditScore from '../record/creditScore';
 import EducationRecord from '../record/educationRecord';
 import EmploymentHistory from '../record/employmentHistory';
 import CriminalRecord from '../record/criminalRecord';
 
-export default function CardRecords({ title, hasRecord, nationalId = "P1234567A" }) {
+export default function CardRecords({ title, hasRecord, nationalId }) {
   const [showModal, setShowModal] = useState(false);
-  const [record, setRecord] = useState(null);
 
   const toggleShow = () => {
     setShowModal(!showModal);
-
-    setRecord(showRecord(title));
   }
 
   const getIcon = title => {
@@ -73,7 +72,7 @@ export default function CardRecords({ title, hasRecord, nationalId = "P1234567A"
   return (
     <>
       <MDBCard
-        border={hasRecord ? 'light' : 'dark'}
+        border='success'
         background={hasRecord ? 'success' : 'light'}
         className={hasRecord ? 'hover-shadow text-white' : 'hover-shadow'}>
         <MDBRow className='g-0'>
@@ -102,7 +101,7 @@ export default function CardRecords({ title, hasRecord, nationalId = "P1234567A"
               <MDBBtn className='btn-close' color='none' onClick={toggleShow}></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>
-              {record}
+              {showRecord(title)}
             </MDBModalBody>
           </MDBModalContent>
         </MDBModalDialog>

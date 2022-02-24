@@ -3,9 +3,9 @@ import CardReports from '../utilities/cardReports';
 import CardRequest from '../utilities/cardRequest';
 import CarouselInsurance from '../utilities/carouselInsurance';
 import CarouselEmployer from '../utilities/carouselEmployer';
-import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 
 export default function Index() {
   const user = useSelector((state) => state.auth.user);
@@ -23,8 +23,8 @@ export default function Index() {
     <>
       <MDBRow>
         <MDBCol md='8'>
-          {user && user.subRoleId == 6 ? <CarouselInsurance /> : ''}
-          {user && user.subRoleId == 7 ? <CarouselEmployer /> : ''}
+          {user && user.subRoleId === 6 ? <CarouselInsurance /> : ''}
+          {user && user.subRoleId === 7 ? <CarouselEmployer /> : ''}
         </MDBCol>
         <MDBCol md='4'>
           <MDBCard border='dark'>

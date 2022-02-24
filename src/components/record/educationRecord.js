@@ -16,21 +16,14 @@ export default function EducationRecord({ nationalId }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!user) return navigate("/");
 
-    if (!user) {
-      navigate("/");
-    } else {
-      if (nationalId && nationalId !== "") dispatch(getRecordDetail(nationalId, "Education Record"));
-      if (nationalIdParams && nationalIdParams !== "") dispatch(getRecordDetail(nationalIdParams, "Education Record"));
-    }
+    if (nationalId && nationalId !== "") dispatch(getRecordDetail(nationalId, "Education Record"));
 
-    // return () => {
-    //   dispatch(removeSelectedRecord());
-    // }
+    if (nationalIdParams && nationalIdParams !== "") dispatch(getRecordDetail(nationalIdParams, "Education Record"));
 
-  }, [user, navigate, dispatch, nationalId]);
-
-  console.log(records);
+    return () => dispatch(removeSelectedRecord());
+  }, [user, navigate, dispatch, nationalId, nationalIdParams]);
 
   return (
     <>
