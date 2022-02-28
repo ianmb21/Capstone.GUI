@@ -3,11 +3,9 @@ import {
   MDBCard,
   MDBRow,
   MDBCol,
-  MDBCardImage,
   MDBCardBody,
   MDBCardTitle,
   MDBCardText,
-  MDBBtn,
 } from 'mdb-react-ui-kit';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';

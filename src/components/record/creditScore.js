@@ -16,21 +16,14 @@ export default function CreditScore({ nationalId }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!user) return navigate("/");
 
-    if (!user) {
-      navigate("/");
-    } else {
-      if (nationalId && nationalId !== "") dispatch(getRecordDetail(nationalId, "Credit Score"));
-      if (nationalIdParams && nationalIdParams !== "") dispatch(getRecordDetail(nationalIdParams, "Credit Score"));
-    }
+    if (nationalId && nationalId !== "") dispatch(getRecordDetail(nationalId, "Credit Score"));
 
-    // return () => {
-    //   dispatch(removeSelectedRecord());
-    // }
+    if (nationalIdParams && nationalIdParams !== "") dispatch(getRecordDetail(nationalIdParams, "Credit Score"));
 
-  }, [user, navigate, dispatch, nationalId]);
-
-  console.log(records);
+    return () => dispatch(removeSelectedRecord());
+  }, [user, navigate, dispatch, nationalId, nationalIdParams]);
 
   return (
     <>

@@ -1,5 +1,4 @@
 import {
-  MDBContainer,
   MDBBreadcrumb,
   MDBBreadcrumbItem
 } from "mdb-react-ui-kit"

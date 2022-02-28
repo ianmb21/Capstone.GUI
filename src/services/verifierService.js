@@ -1,10 +1,10 @@
 import axios from "axios";
 import authHeader from './auth-header';
 
-const API_URL = "http://52.154.202.96/api/Verifier/";
+const API_URL = `${process.env.REACT_APP_API_URL}/Verifier/`;
 
 const getRequests = (requestStatus='All') => {
-  return axios.get(API_URL + "getRequest" + '/' + requestStatus, { headers: authHeader() });
+  return axios.get(API_URL + "getRequest/" + requestStatus, { headers: authHeader() });
 };
 
 const updateRequest = (data) => {

@@ -1,4 +1,4 @@
-import { Form, Button, Row, Col, Alert, Spinner, Modal, Card } from 'react-bootstrap';
+import { Form, Button, Alert, Spinner, Modal } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
@@ -7,7 +7,7 @@ import { setMessage, clearMessage } from '../../actions/message';
 import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
-import { MDBCard, MDBCardBody, MDBCardHeader, MDBCardTitle, MDBCol, MDBRow } from 'mdb-react-ui-kit';
+import { MDBCard, MDBCardBody, MDBCardHeader, MDBCol, MDBRow } from 'mdb-react-ui-kit';
 
 export default function VerifierRequest() {
   const user = useSelector((state) => state.auth.user);
@@ -52,8 +52,8 @@ export default function VerifierRequest() {
 
   const columns = [
     {
-        name: "National ID",
-        selector: row => '*****' + row.nationalId.substr(row.nationalId.length - 4)
+      name: "National ID",
+      selector: row => '*****' + row.nationalId.substr(row.nationalId.length - 4)
     },
     {
       name: "First Name",
@@ -118,7 +118,7 @@ export default function VerifierRequest() {
       dispatch(setMessage("Error: Please select a Record Type."));
 
       setLoading(false);
-    } else if (remarks == "") {
+    } else if (remarks === "") {
       dispatch(setMessage("Error: Please input purpose details."));
       setLoading(false);
     } else {

@@ -4,8 +4,6 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import DataTable from 'react-data-table-component';
 import { Breadcrumb, Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Dropdown from 'react-bootstrap/Dropdown';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faFileAlt, faThumbsUp, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
@@ -25,40 +23,38 @@ export default function RequestsLists() {
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [requestStatus, setRequestStatus] = useState('All');
-
   const handleClose = () => setShow(false);
+
   const handleShow = (row) => {
     setShow(true);
     setCurrentRow(row);
   };
+
   const handleSelect = (e) => {
     e.preventDefault();
-    //alert(e.target.value);
 
     setLoading(true);
+
     dispatch(getRequests(e.target.value))
-    .then(() => {
-      setLoading(false);
-      //dispatch(setMessage("Request/s has been successfully created."));
-    })
-    .catch((error) => {
-      console.log(error);
-      setLoading(false);
-    });
-    
-    
-
+      .then(() => {
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+      });
   };
-  const requestStatusList = [{ id: 'All', value: 'All' },
-  { id: 'PendingHolder', value: 'PendingHolder' },
-  { id: 'RejectedIssuer', value: 'RejectedIssuer' },
-  { id: 'RejectedVerifier', value: 'RejectedVerifier' },
-  { id: 'Approved', value: 'Approved' },
-  { id: 'Revoked', value: 'Revoked' },
-  { id: 'PendingIssuer', value: 'PendingIssuer' },
-  { id: 'PendingVerifier', value: 'PendingVerifier' }];
 
+  const requestStatusList = [
+    { id: 'All', value: 'All' },
+    { id: 'PendingHolder', value: 'PendingHolder' },
+    { id: 'RejectedIssuer', value: 'RejectedIssuer' },
+    { id: 'RejectedVerifier', value: 'RejectedVerifier' },
+    { id: 'Approved', value: 'Approved' },
+    { id: 'Revoked', value: 'Revoked' },
+    { id: 'PendingIssuer', value: 'PendingIssuer' },
+    { id: 'PendingVerifier', value: 'PendingVerifier' }
+  ];
 
   const ActionComponent = ({ row, onClick }) => {
     const clickHandler = () => onClick(row);
@@ -135,10 +131,6 @@ export default function RequestsLists() {
       recordTypeId: [currentRow.recordTypeId]
     }
 
-    
-
-    console.log(data);
-
     dispatch(updateRequest(data))
       .then(() => {
         setRemarks("");
@@ -158,17 +150,11 @@ export default function RequestsLists() {
   };
 
   useEffect(() => {
+    if (!user) return navigate("/");
 
-    if (!user) {
-      // navigate("/issuer/login");
-      navigate("/");
-    } else {
-      dispatch(getRequests());
-    }
+    dispatch(getRequests());
 
-    return () => {
-      dispatch(clearMessage());
-    }
+    return () => dispatch(clearMessage());
 
   }, [user, navigate, dispatch]);
 
@@ -186,17 +172,15 @@ export default function RequestsLists() {
         </Alert>
       )}
 
-      <Form.Select aria-label="Default select example" onChange={(e) => handleSelect(e) }>
-          {
-              requestStatusList.map((items) => {
-                return (
-                  <option value={items.id}>{items.value}</option>
-                );
-              })
-          }          
-      </Form.Select>      
-
-
+      <Form.Select aria-label="Default select example" onChange={(e) => handleSelect(e)}>
+        {
+          requestStatusList.map((items) => {
+            return (
+              <option value={items.id}>{items.value}</option>
+            );
+          })
+        }
+      </Form.Select>
 
       <Row>
         <Col>
@@ -208,8 +192,6 @@ export default function RequestsLists() {
         </Col>
       </Row>
 
-
-
       <Modal
         show={show}
         onHide={handleClose}
@@ -219,10 +201,10 @@ export default function RequestsLists() {
 
         <Modal.Header closeButton>
           <Modal.Title>
-            {/* {currentRow.recordTypeName} */}
             Request Details
           </Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           {currentRow ? (
             <>
@@ -290,24 +272,10 @@ export default function RequestsLists() {
               <FontAwesomeIcon icon={faFileAlt} /> Show Record Details
             </Button>
           </Link>
-            
+
           {(currentRow.requestStatus === "PendingIssuer") &&
             (
               <><Button variant="success" disabled={loading} onClick={() => updateStatusAndRemarks("PendingHolder")}>
-              {loading ? (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true" />
-                  {" "}Loading...
-                </>
-              ) : (
-                <><FontAwesomeIcon icon={faThumbsUp} /> Approve</>
-              )}
-            </Button><Button variant="danger" disabled={loading} onClick={() => updateStatusAndRemarks("Rejected")}>
                 {loading ? (
                   <>
                     <Spinner
@@ -319,16 +287,27 @@ export default function RequestsLists() {
                     {" "}Loading...
                   </>
                 ) : (
-                  <><FontAwesomeIcon icon={faThumbsDown} /> Reject</>
+                  <><FontAwesomeIcon icon={faThumbsUp} /> Approve</>
                 )}
-              </Button></>
+              </Button><Button variant="danger" disabled={loading} onClick={() => updateStatusAndRemarks("Rejected")}>
+                  {loading ? (
+                    <>
+                      <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true" />
+                      {" "}Loading...
+                    </>
+                  ) : (
+                    <><FontAwesomeIcon icon={faThumbsDown} /> Reject</>
+                  )}
+                </Button></>
             )
           }
         </Modal.Footer>
       </Modal>
-
-              
-
     </>
   );
 };

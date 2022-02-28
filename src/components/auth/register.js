@@ -2,10 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Form, Button, Row, Col, Breadcrumb, Alert, Spinner } from 'react-bootstrap';
-
-import { register } from '../../actions/auth';
-import { setMessage, clearMessage } from '../../actions/message';
+import { Alert } from 'react-bootstrap';
 import {
   MDBRow,
   MDBCol,
@@ -17,8 +14,10 @@ import {
   MDBSpinner,
 } from 'mdb-react-ui-kit';
 
+import { register } from '../../actions/auth';
+import { setMessage, clearMessage } from '../../actions/message';
 
-export default function Register(props) {
+export default function Register({ roleName }) {
   const message = useSelector(state => state.message);
 
   const dispatch = useDispatch();
@@ -52,28 +51,28 @@ export default function Register(props) {
       );
 
       setLoading(false);
-    } else {
-      dispatch(
-        register(username, password, props.roleName, nationalId)
-      )
-        .then(() => {
-          setSuccesful(true);
-          setLoading(false);
-
-          dispatch(
-            setMessage("Holder account has been successfully registered.")
-          );
-        })
-        .catch(() => {
-          setSuccesful(false);
-          setLoading(false);
-
-          dispatch(
-            setMessage("An unexpected error has occured.")
-          );
-        });
+      return
     }
 
+    dispatch(
+      register(username, password, roleName, nationalId)
+    )
+      .then(() => {
+        setSuccesful(true);
+        setLoading(false);
+
+        dispatch(
+          setMessage("Holder account has been successfully registered.")
+        );
+      })
+      .catch(() => {
+        setSuccesful(false);
+        setLoading(false);
+
+        dispatch(
+          setMessage("An unexpected error has occured.")
+        );
+      });
   };
 
   useEffect(() => {
@@ -99,14 +98,14 @@ export default function Register(props) {
                   name='username'
                   value={user.username}
                   onChange={handleInputChange} />
-                  <MDBInput
-                    required
-                    className='mb-4'
-                    id='nationalId'
-                    label='National Id'
-                    name='nationalId'
-                    value={user.nationalId}
-                    onChange={handleInputChange} />
+                <MDBInput
+                  required
+                  className='mb-4'
+                  id='nationalId'
+                  label='National Id'
+                  name='nationalId'
+                  value={user.nationalId}
+                  onChange={handleInputChange} />
                 <MDBInput
                   required
                   className='mb-4'
@@ -132,12 +131,10 @@ export default function Register(props) {
                       <MDBSpinner size='sm' className='me-2' color='light' />
                       Loading...
                     </>
-                  ) : (<>Register</>)
-                  }
-
+                  ) : (<>Register</>)}
                 </MDBBtn>
 
-                <Link to={`/`}>
+                <Link to='/'>
                   <MDBBtn color='link' block>
                     Cancel
                   </MDBBtn>
@@ -155,93 +152,6 @@ export default function Register(props) {
         </MDBCol>
         <MDBCol lg='4'></MDBCol>
       </MDBRow>
-
-
-      {/* <Breadcrumb>
-        <Breadcrumb.Item active>{props.roleName}</Breadcrumb.Item>
-        <Breadcrumb.Item active>Register</Breadcrumb.Item>
-      </Breadcrumb>
-      <Row className='mt-3'>
-        <Col md={4}>
-          <Form onSubmit={handleRegister}>
-            <Form.Group className="mb-3" controlId="username">
-              <Form.Label>Username</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="Username"
-                name="username"
-                value={user.username}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="nationalId">
-              <Form.Label>National Id</Form.Label>
-              <Form.Control
-                required
-                type="text"
-                placeholder="National Id"
-                name="nationalId"
-                value={user.nationalId}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="password">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                required
-                type="password"
-                placeholder="Password"
-                name="password"
-                value={user.password}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="confirmPassword">
-              <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                required
-                type="password"
-                placeholder="Confirm Password"
-                name="confirmPassword"
-                value={user.confirmPassword}
-                onChange={handleInputChange}
-              />
-            </Form.Group>
-
-            <Button type="submit" variant="primary" disabled={loading}>
-              {loading ? (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                  />
-                  {" "}Loading...
-                </>
-              ) : (
-                <>Register</>
-              )}
-            </Button>
-
-            {" "}
-            <Link to={`/${props.roleName.toLowerCase()}/login`}> 
-      <Link to={`/`}>
-        <Button variant="secondary">Back</Button>
-      </Link>
-
-      {message && (
-        <Alert className='mt-3' variant={successful ? "primary" : "danger"}>
-          {message}
-        </Alert>
-      )}
-    </Form>
-        </Col >
-      </Row > */}
     </>
   );
 }

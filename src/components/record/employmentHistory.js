@@ -16,21 +16,14 @@ export default function EmploymentHistory({ nationalId }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!user) return navigate("/");
 
-    if (!user) {
-      navigate("/");
-    } else {
-      if (nationalId && nationalId !== "") dispatch(getRecordDetail(nationalId, "Employment History"));
-      if (nationalIdParams && nationalIdParams !== "") dispatch(getRecordDetail(nationalIdParams, "Employment History"));
-    }
+    if (nationalId && nationalId !== "") dispatch(getRecordDetail(nationalId, "Employment History"));
 
-    // return () => {
-    //   dispatch(removeSelectedRecord());
-    // }
+    if (nationalIdParams && nationalIdParams !== "") dispatch(getRecordDetail(nationalIdParams, "Employment History"));
 
-  }, [user, navigate, dispatch, nationalId]);
-
-  console.log(records);
+    return () => dispatch(removeSelectedRecord());
+  }, [user, navigate, dispatch, nationalId, nationalIdParams]);
 
   return (
     <>

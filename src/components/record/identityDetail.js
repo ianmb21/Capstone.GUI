@@ -16,22 +16,14 @@ export default function IdentityDetail({ nationalId }) {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!user) return navigate("/");
 
-    if (!user) {
-      navigate("/");
-    } else {
-      if (nationalId && nationalId !== "") dispatch(getRecordDetail(nationalId, "Identity Detail"));
-      if (nationalIdParams && nationalIdParams !== "") dispatch(getRecordDetail(nationalIdParams, "Identity Detail"));
-      
-    }
+    if (nationalId && nationalId !== "") dispatch(getRecordDetail(nationalId, "Identity Detail"));
 
-    // return () => {
-    //   dispatch(removeSelectedRecord());
-    // }
+    if (nationalIdParams && nationalIdParams !== "") dispatch(getRecordDetail(nationalIdParams, "Identity Detail"));
 
-  }, [user, navigate, dispatch, nationalId]);
-
-  console.log(records);
+    return () => dispatch(removeSelectedRecord());
+  }, [user, navigate, dispatch, nationalId, nationalIdParams]);
 
   return (
     <>
