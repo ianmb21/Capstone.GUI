@@ -51,6 +51,7 @@ export default function CardRecords({ title, hasRecord, nationalId }) {
   }
 
   const showRecord = title => {
+    console.log(title);
 
     switch (title) {
       case "Identity Details":
@@ -101,7 +102,7 @@ export default function CardRecords({ title, hasRecord, nationalId }) {
               <MDBBtn className='btn-close' color='none' onClick={toggleShow}></MDBBtn>
             </MDBModalHeader>
             <MDBModalBody>
-              {showRecord(title)}
+              {showModal && showRecord(title)}
             </MDBModalBody>
           </MDBModalContent>
         </MDBModalDialog>
