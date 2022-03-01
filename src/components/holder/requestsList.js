@@ -61,7 +61,8 @@ export default function RequestsLists() {
   };
 
   useEffect(() => {
-    dispatch(getRequests(user.userId, searchFilters.status))
+    if (user) {
+      dispatch(getRequests(user.userId, searchFilters.status))
       .then(() => {
         // TO-BE: Will convert this function in API
         // const filteredRequestsArray = requests.filter(request => {
@@ -80,10 +81,11 @@ export default function RequestsLists() {
 
         // console.log(filteredRequestsArray);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
-  }, [searchFilters, dispatch, user.userId])
+    }
+  }, [searchFilters, dispatch, user])
 
   const updateHolderRequestStatus = (status) => {
     setLoading(true);
@@ -101,7 +103,7 @@ export default function RequestsLists() {
 
         setLoading(false);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         setLoading(false);
       });
@@ -340,8 +342,7 @@ export default function RequestsLists() {
                     <><FontAwesomeIcon icon={faPaperPlane} /> Send To Verifier</>
                   )}
                 </Button>
-              )
-              : (!currentRow.hasRecord && currentRow.requestStatus === "PendingHolder") ?
+              ) : (!currentRow.hasRecord && currentRow.requestStatus === "PendingHolder") ?
                 (
                   <Button variant="primary" disabled={loading} onClick={() => updateHolderRequestStatus("PendingIssuer")}>
                     {loading ? (
@@ -359,8 +360,7 @@ export default function RequestsLists() {
                       <><FontAwesomeIcon icon={faPaperPlane} /> Send To Issuer</>
                     )}
                   </Button>
-                )
-                : (currentRow.requestStatus === "PendingVerifier") ?
+                ) : (currentRow.requestStatus === "PendingVerifier") ?
                   (
                     <Button variant="danger" disabled={loading} onClick={() => updateHolderRequestStatus("Revoked")}>
                       {loading ? (
@@ -378,11 +378,7 @@ export default function RequestsLists() {
                         <><FontAwesomeIcon icon={faUndo} /> Revoke</>
                       )}
                     </Button>
-                  )
-                  :
-                  (
-                    ""
-                  )
+                  ) : ("")
           }
         </Modal.Footer>
       </Modal>
