@@ -1,11 +1,13 @@
 import {
   GET_HOLDER_REQUESTS,
+  GET_NATIONAL_ID,
   CREATE_REQUEST,
   UPDATE_HOLDER_REQUEST_STATUS
 } from "../actions/types";
 
 const initialState = {
   allRequests: [],
+  nationalId: "",
 };
 
 export const holderReducer = (state = initialState, { type, payload }) => {
@@ -15,6 +17,12 @@ export const holderReducer = (state = initialState, { type, payload }) => {
       return {
         ...state,
         allRequests: payload,
+      };
+
+    case GET_NATIONAL_ID:
+      return {
+        ...state,
+        nationalId: payload,
       };
 
     case CREATE_REQUEST:

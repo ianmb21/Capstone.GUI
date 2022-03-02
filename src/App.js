@@ -1,11 +1,9 @@
-import 'mdb-react-ui-kit/dist/css/mdb.min.css'
-import { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, NavLink } from "react-router-dom";
+import 'mdb-react-ui-kit/dist/css/mdb.min.css';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { logout } from './actions/auth';
 import Login from "./components/auth/login"
 import Register from "./components/auth/register";
-import Request from "./components/holder/request";
 import HolderHomepage from "./components/holder/";
 import HolderRequestsList from "./components/holder/requestsList";
 import IssuerRequestsList from "./components/issuer/requestsList";
@@ -22,31 +20,21 @@ import {
   MDBContainer,
   MDBNavbar,
   MDBNavbarBrand,
-  MDBNavbarToggler,
-  MDBIcon,
-  MDBCollapse,
   MDBNavbarNav,
   MDBNavbarItem,
-  MDBNavbarLink,
   MDBDropdown,
   MDBDropdownToggle,
   MDBDropdownMenu,
   MDBDropdownItem,
   MDBDropdownLink,
-  MDBFooter
 } from 'mdb-react-ui-kit';
 
 export default function App() {
-  const user = useSelector((state) => state.auth.user);
-  const selectedRecords = useSelector((state) => state.record.selectedRecords);
-
-  const [showNav, setShowNav] = useState(false);
+  const user = useSelector(state => state.auth.user);
 
   const dispatch = useDispatch();
 
-  const handleLogout = () => {
-    dispatch(logout());
-  }
+  const handleLogout = () => dispatch(logout());
 
   return (
     <Router>
@@ -76,19 +64,13 @@ export default function App() {
       <MDBContainer fluid>
         <Routes>
           <Route path="/" element={<Login roleName="Holder" />} />
-          {/* <Route path="/holder/login" element={<Login roleName="Holder" />} /> */}
           <Route path="/holder/" element={<HolderHomepage />} />
           <Route path="/holder/list" element={<HolderRequestsList />} />
           <Route path="/holder/register" element={<Register roleName="Holder" />} />
-          <Route path="/holder/request" element={<Request />} />
 
-          {/* <Route path="/issuer/login" element={<Login roleName="Issuer" />} />
-          <Route path="/issuer/register" element={<Register roleName="Issuer" />} /> */}
           <Route path="/issuer" element={<IssuerRequestsList />} />
           <Route path="/issuer/list" element={<IssuerRequestsList />} />
 
-          {/* <Route path="/verifier/login" element={<Login roleName="Verifier" />} />
-          <Route path="/verifier/register" element={<Register roleName="Verifier" />} /> */}
           <Route path="/verifier/" element={<VerifierHomepage />} />
           <Route path="/verifier/list" element={<VerifierRequestsList />} />
           <Route path="/verifier/request" element={<VerifierRequest />} />
@@ -100,8 +82,6 @@ export default function App() {
           <Route path="/record/Credit%20Score/:nationalIdParams" element={<CreditScore />} />
         </Routes>
       </MDBContainer>
-
-      
     </Router>
   );
 

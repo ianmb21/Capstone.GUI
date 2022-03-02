@@ -2,10 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Form, Button, Row, Col, Breadcrumb, Alert, Spinner, FloatingLabel, Card, Carousel } from 'react-bootstrap';
-
-import { login, logout } from '../../actions/auth';
-import { setMessage, clearMessage } from '../../actions/message';
+import { Alert } from 'react-bootstrap';
 import {
   MDBBtn,
   MDBCardBody,
@@ -15,12 +12,10 @@ import {
   MDBRow,
   MDBCard,
   MDBSpinner,
-  MDBCarousel,
-  MDBCarouselInner,
-  MDBCarouselItem,
-  MDBCarouselElement,
-  MDBCarouselCaption,
 } from 'mdb-react-ui-kit';
+
+import { login } from '../../actions/auth';
+import { clearMessage } from '../../actions/message';
 
 export default function Login() {
   const message = useSelector((state) => state.message);
@@ -73,7 +68,7 @@ export default function Login() {
     <>
       <MDBRow>
         <MDBCol md='8'>
-          <img src="/images/verifiable_credentials.png" className='img-fluid' />
+          <img src="/images/verifiable_credentials.png" alt='verifiable credentials vector' className='img-fluid' />
         </MDBCol>
         <MDBCol md='4'>
           <MDBCard className='mb-3' border='primary'>

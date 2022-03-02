@@ -3,7 +3,6 @@ import {
   MDBCarouselInner,
   MDBCarouselItem,
   MDBCarouselElement,
-  MDBCarouselCaption,
 } from 'mdb-react-ui-kit';
 
 export default function CarouselInsurance() {

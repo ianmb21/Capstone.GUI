@@ -3,27 +3,48 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from 'react-router-dom';
 
 import DataTable from 'react-data-table-component';
-import { Row, Col, Button, Modal, Form, Alert, Spinner } from 'react-bootstrap';
-import Breadcrumb from '../utilities/breadcrumb';
+import { Row, Col, Button, Modal, Form, Spinner } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInfoCircle, faArrowLeft, faFileAlt, faPaperPlane, faUndo } from '@fortawesome/free-solid-svg-icons';
 
 import { getRequests, updateRequestStatus } from "../../actions/holder";
-import { MDBBtn } from 'mdb-react-ui-kit';
 
 export default function RequestsLists() {
-  const user = useSelector((state) => state.auth.user);
-  const requests = useSelector((state) => state.holder.allRequests);
+  const user = useSelector(state => state.auth.user);
+  const requests = useSelector(state => state.holder.allRequests);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const initialSearchFilterState = {
+    status: 'All',
+    requestedBy: '',
+    recordType: '',
+  }
 
   const [currentRow, setCurrentRow] = useState({});
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
   const [readOnly, setReadOnly] = useState(true);
+  const [searchFilters, setSearchFilters] = useState(initialSearchFilterState);
+  // const [filteredRequests, setFilteredRequests] = useState({});
+
+  const getRequestedByItems = () => {
+    const allRequestedByItems = requests.map(item => item.verifiedBy);
+    const uniqueRequestedByItems = [...new Set(allRequestedByItems)];
+
+    return uniqueRequestedByItems;
+  };
+
+  const getRecordTypeItems = () => {
+    const allRecordTypeItems = requests.map(item => item.recordTypeName);
+    const uniqueRecordTypeItems = [...new Set(allRecordTypeItems)];
+
+    return uniqueRecordTypeItems;
+  };
 
   const handleClose = () => setShow(false);
+
   const handleShow = (row) => {
     setShow(true);
     setCurrentRow(row);
@@ -34,25 +55,70 @@ export default function RequestsLists() {
   const handleSelect = (e) => {
     e.preventDefault();
 
-    setLoading(true);
-    dispatch(getRequests(user.userId, e.target.value))
+    const { name, value } = e.target;
+
+    setSearchFilters({ ...searchFilters, [name]: value });
+  };
+
+  useEffect(() => {
+    if (user) {
+      dispatch(getRequests(user.userId, searchFilters.status))
       .then(() => {
+        // TO-BE: Will convert this function in API
+        // const filteredRequestsArray = requests.filter(request => {
+        //   if (searchFilters.requestedBy === '') {
+        //     return request.recordTypeName === searchFilters.recordType;
+        //   }
+
+        //   if (searchFilters.recordType === '') {
+        //     return request.verifiedBy === searchFilters.requestedBy;
+        //   }
+
+        //   return request.recordTypeName === searchFilters.recordType || request.verifiedBy === searchFilters.requestedBy;
+        // });
+
+        // setFilteredRequests(filteredRequestsArray);
+
+        // console.log(filteredRequestsArray);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    }
+  }, [searchFilters, dispatch, user])
+
+  const updateHolderRequestStatus = (status) => {
+    setLoading(true);
+
+    const data = {
+      requestId: currentRow.requestId,
+      requestStatus: status
+    }
+
+    dispatch(updateRequestStatus(data))
+      .then(() => {
+        handleClose();
+
+        dispatch(getRequests(user.userId));
+
         setLoading(false);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
         setLoading(false);
       });
   };
 
-  const requestStatusList = [{ id: 'All', value: 'All' },
-  { id: 'PendingHolder', value: 'PendingHolder' },
-  { id: 'RejectedIssuer', value: 'RejectedIssuer' },
-  { id: 'RejectedVerifier', value: 'RejectedVerifier' },
-  { id: 'Approved', value: 'Approved' },
-  { id: 'Revoked', value: 'Revoked' },
-  { id: 'PendingIssuer', value: 'PendingIssuer' },
-  { id: 'PendingVerifier', value: 'PendingVerifier' }];
+  const requestStatusList = [
+    { id: 'All', value: 'All' },
+    { id: 'PendingHolder', value: 'PendingHolder' },
+    { id: 'RejectedIssuer', value: 'RejectedIssuer' },
+    { id: 'RejectedVerifier', value: 'RejectedVerifier' },
+    { id: 'Approved', value: 'Approved' },
+    { id: 'Revoked', value: 'Revoked' },
+    { id: 'PendingIssuer', value: 'PendingIssuer' },
+    { id: 'PendingVerifier', value: 'PendingVerifier' }
+  ];
 
   const ActionComponent = ({ row, onClick }) => {
     const clickHandler = () => onClick(row);
@@ -104,56 +170,52 @@ export default function RequestsLists() {
   ];
 
   useEffect(() => {
+    if (!user) return navigate("/");
 
-    if (!user) {
-      // navigate("/holder/login");
-      navigate("/");
-    } else {
-      dispatch(getRequests(user.userId, 'All'));
-    }
+    dispatch(getRequests(user.userId, 'All'));
 
   }, [user, navigate, dispatch]);
-
-  const updateHolderRequestStatus = (status) => {
-    setLoading(true);
-
-    const data = {
-      requestId: currentRow.requestId,
-      requestStatus: status
-    }
-
-    console.log(data);
-
-    dispatch(updateRequestStatus(data))
-      .then(() => {
-        handleClose();
-
-        // dispatch(setMessage("The request has been updated."));
-        dispatch(getRequests(user.userId));
-
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-      });
-  };
 
   return (
     <>
       <Link to="/holder">
         <Button variant="link"><FontAwesomeIcon icon={faArrowLeft} /> Return to homepage</Button>
       </Link>
-      <Form.Select aria-label="Default select example" onChange={(e) => handleSelect(e)}>
-        {
-          requestStatusList.map((items) => {
-            return (
-              <option value={items.id}>{items.value}</option>
-            );
-          })
-        }
-      </Form.Select>
 
+      <Row>
+        <Form.Group as={Col} md="4" controlId="status">
+          <Form.Label>
+            Status
+          </Form.Label>
+          <Form.Select size='sm' name='status' onChange={(e) => handleSelect(e)} >
+            {requestStatusList.map((items) =>
+              <option value={items.id}>{items.value}</option>
+            )}
+          </Form.Select>
+        </Form.Group>
+        <Form.Group as={Col} md="4" controlId="status">
+          <Form.Label>
+            Requested By
+          </Form.Label>
+          <Form.Select size='sm' name='requestedBy' onChange={(e) => handleSelect(e)} >
+            <option value="">All</option>
+            {getRequestedByItems().map((item) =>
+              <option value={item}>{item}</option>
+            )}
+          </Form.Select>
+        </Form.Group>
+        <Form.Group as={Col} md="4" controlId="status">
+          <Form.Label>
+            Record Type
+          </Form.Label>
+          <Form.Select size='sm' name='recordType' onChange={(e) => handleSelect(e)} >
+            <option value="">All</option>
+            {getRecordTypeItems().map((item) =>
+              <option value={item}>{item}</option>
+            )}
+          </Form.Select>
+        </Form.Group>
+      </Row>
 
       <Row>
         <Col>
@@ -177,7 +239,6 @@ export default function RequestsLists() {
 
         <Modal.Header closeButton>
           <Modal.Title>
-            {/* {currentRow.recordTypeName} */}
             Request Details
           </Modal.Title>
         </Modal.Header>
@@ -252,8 +313,8 @@ export default function RequestsLists() {
         </Modal.Body>
 
         <Modal.Footer>
-          {(currentRow.requestStatus === "PendingVerifier" || currentRow.requestStatus === "Approved" || 
-          (currentRow.requestStatus === "PendingHolder" && currentRow.issuedBy !== null)) &&
+          {(currentRow.requestStatus === "PendingVerifier" || currentRow.requestStatus === "Approved" ||
+            (currentRow.requestStatus === "PendingHolder" && currentRow.issuedBy !== null)) &&
             (
               <Link to={`/record/${currentRow.recordTypeName}/${currentRow.nationalId}`}>
                 <Button variant="primary">
@@ -281,8 +342,7 @@ export default function RequestsLists() {
                     <><FontAwesomeIcon icon={faPaperPlane} /> Send To Verifier</>
                   )}
                 </Button>
-              )
-              : (!currentRow.hasRecord && currentRow.requestStatus === "PendingHolder") ?
+              ) : (!currentRow.hasRecord && currentRow.requestStatus === "PendingHolder") ?
                 (
                   <Button variant="primary" disabled={loading} onClick={() => updateHolderRequestStatus("PendingIssuer")}>
                     {loading ? (
@@ -300,8 +360,7 @@ export default function RequestsLists() {
                       <><FontAwesomeIcon icon={faPaperPlane} /> Send To Issuer</>
                     )}
                   </Button>
-                )
-                : (currentRow.requestStatus === "PendingVerifier") ?
+                ) : (currentRow.requestStatus === "PendingVerifier") ?
                   (
                     <Button variant="danger" disabled={loading} onClick={() => updateHolderRequestStatus("Revoked")}>
                       {loading ? (
@@ -319,11 +378,7 @@ export default function RequestsLists() {
                         <><FontAwesomeIcon icon={faUndo} /> Revoke</>
                       )}
                     </Button>
-                  )
-                  :
-                  (
-                    ""
-                  )
+                  ) : ("")
           }
         </Modal.Footer>
       </Modal>
